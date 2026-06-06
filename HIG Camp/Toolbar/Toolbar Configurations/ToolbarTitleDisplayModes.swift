@@ -12,24 +12,15 @@ struct ToolbarTitleDemoView: View {
     let mode: ToolbarTitleDisplayMode
     var toolbarItems: ToolbarItemsVariant = .leadingAndTrailing
 
-    private let items = (1...20).map { "Item \($0)" }
-
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(items, id: \.self) { item in
-                        NavigationLink(value: item) {
-                            DemoRow(label: item)
-                        }
-                    }
-                }
-                .padding(.vertical)
-            }
+            DemoScrollView(count: 20)
+            .background(.cyan.gradient.opacity(0.7))
+            .tint(.cyan)
             .navigationTitle("Toolbar Titles")
             .toolbarTitleDisplayMode(mode)
             .navigationDestination(for: String.self) { item in
-                ToolbarDetailView(item: item)
+                DemoDetailView(item: item)
             }
             .toolbar {
                 switch toolbarItems {
@@ -54,34 +45,6 @@ struct ToolbarTitleDemoView: View {
                         Button("Favourite", systemImage: "star") { }
                     }
                 }
-            }
-            .background(.cyan.gradient.opacity(0.7))
-        }
-    }
-}
-
-// MARK: - Detail View
-
-struct ToolbarDetailView: View {
-    let item: String
-
-    var body: some View {
-        ScrollView {
-            Text("Detail content for \(item)")
-                .padding()
-        }
-        .navigationTitle(item)
-        .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                Button("Share", systemImage: "square.and.arrow.up") { }
-                Button("Bookmark", systemImage: "bookmark") { }
-                Button("More", systemImage: "ellipsis.circle") { }
-            }
-            ToolbarItemGroup(placement: .bottomBar) {
-                Button("Previous", systemImage: "chevron.left") { }
-                Spacer()
-                Button("Next", systemImage: "chevron.right") { }
             }
         }
     }

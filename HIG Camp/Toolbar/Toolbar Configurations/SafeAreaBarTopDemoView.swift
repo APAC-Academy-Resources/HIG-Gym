@@ -7,20 +7,16 @@ struct TopSafeAreaBarDemoView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(0..<35) { index in
-                        DemoRow(label: "Item \(index + 1)")
-                    }
-                }
-                .padding(.vertical)
-            }
+            DemoScrollView(count: 35)
+            .background(.orange.gradient.opacity(0.7))
+            .tint(.orange)
             .safeAreaBar(edge: .top) {
                 Picker("View", selection: $selectedSegment) {
                     Text("All").tag(0)
                     Text("Unread").tag(1)
                     Text("Flagged").tag(2)
                 }
+                .controlSize(.large)
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 .padding(.vertical, 8)

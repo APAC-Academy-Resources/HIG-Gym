@@ -5,14 +5,9 @@ struct ScrollEdgeEffectDemoView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(0..<40) { index in
-                        DemoRow(label: "Item \(index + 1)")
-                    }
-                }
-                .padding(.vertical)
-            }
+            DemoScrollView(count: 40)
+            .background(.red.gradient.opacity(0.7))
+            .tint(.red)
             .scrollEdgeEffectStyle(style, for: .all)
             .navigationTitle("Edge Effect")
             .toolbarTitleDisplayMode(.inline)

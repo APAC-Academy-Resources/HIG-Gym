@@ -15,18 +15,33 @@ struct ToolbarItemsDemoView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(0..<20) { index in
-                        DemoRow(label: "Item \(index + 1)")
-                    }
-                }
-                .padding(.vertical)
-            }
-            .navigationTitle("Liquid Glass Toolbar")
+            DemoScrollView(count: 20)
+            .background(.blue.gradient.opacity(0.7))
+            .tint(.blue)
             .toolbarTitleDisplayMode(.inline)
-            .toolbar {
-                switch variant {
+            .navigationTitle("Toolbar Items")
+            .navigationDestination(for: String.self) { item in
+                DemoDetailView(item: item)
+            }
+            .safeAreaBar(edge: .bottom, content: {
+                HStack {
+                    Spacer()
+                    Button("Add", systemImage: "plus") {}
+                        .buttonStyle(.glassProminent)
+                        .controlSize(.large)
+                        .labelStyle(.iconOnly)
+                        .buttonBorderShape(.circle)
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom)
+            })
+            .toolbar { toolbarContent }
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        switch variant {
                 case .singleItem:
                     // Single item gets its own isolated floating pill
                     ToolbarItem(placement: .topBarTrailing) {
@@ -71,47 +86,53 @@ struct ToolbarItemsDemoView: View {
                     }
                     
                 case .mixed:
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button { } label: {
+                            Image("g")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 30, height: 30)
+                                .clipShape(.circle)
+                        }
+                    }
+                    
                     ToolbarItem(placement: .topBarTrailing) {
-                        Picker(selection: $selected) {
-                            Text("First").tag(1)
-                            Text("Second").tag(2)
-                        } label: {
-                            Text("Picker")
-                        }
-                        .pickerStyle(.segmented)
+                        Button("Search", systemImage: "sparkle.magnifyingglass") { }
                     }
-                    ToolbarItem(placement: .bottomBar) {
-                        Button("back", systemImage: "chevron.backward") { }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Pen", systemImage: "scribble") { }
                     }
-                    ToolbarItem(placement: .bottomBar) {
-                        Button("forward", systemImage: "chevron.forward") { }
-                    }
-                    
-                    ToolbarSpacer(placement: .bottomBar)
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        Menu {
-                            Label("Third", systemImage: "3.circle.fill")
-                            Label("Second", systemImage: "2.circle.fill")
-                            Label("First", systemImage: "1.circle.fill")
-                        } label: {
-                            Text("Menu")
-                        }
 
+                    ToolbarSpacer(placement: .topBarTrailing)
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Files", systemImage: "folder") { }
                     }
                     
-                    ToolbarSpacer(placement: .bottomBar)
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle(isOn: $isOn) {
-                            Label("Bulb", systemImage: "lightbulb")
-                        }
-                        .toggleStyle(.button)
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Button("back", systemImage: "chevron.backward") { }
+                    Button("forward", systemImage: "chevron.forward") { }
+                }
+                            
+                ToolbarSpacer(placement: .bottomBar)
+                ToolbarItem(placement: .bottomBar) {
+                    Menu {
+                        Label("Third", systemImage: "3.circle.fill")
+                        Label("Second", systemImage: "2.circle.fill")
+                        Label("First", systemImage: "1.circle.fill")
+                    } label: {
+                        Text("Menu")
                     }
                 }
+                ToolbarSpacer(placement: .bottomBar)
+                ToolbarItem(placement: .bottomBar) {
+                            Toggle(isOn: $isOn) {
+                                Label("Bulb", systemImage: isOn ? "lightbulb.min" : "lightbulb")
+                            }
+                            .toggleStyle(.button)
+                        }
             }
         }
-    }
 }
 
 #Preview("Single Item") {

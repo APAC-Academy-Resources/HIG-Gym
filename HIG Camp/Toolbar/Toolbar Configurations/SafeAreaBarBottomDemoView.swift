@@ -8,21 +8,16 @@ struct BottomSafeAreaBarDemoView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 12) {
-                    ForEach(0..<35) { index in
-                        DemoRow(label: "Item \(index + 1)")
-                    }
-                }
-                .padding(.vertical)
-            }
-            // Place .safeAreaBar on ScrollView, not NavigationStack
+            DemoScrollView(count: 35)
+            .background(.mint.gradient.opacity(0.7))
+            .tint(.mint)
             .safeAreaBar(edge: .bottom) {
                 Picker("View", selection: $selectedSegment) {
                     Text("All").tag(0)
                     Text("Unread").tag(1)
                     Text("Flagged").tag(2)
                 }
+                .controlSize(.large)
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 .padding(.vertical, 8)
@@ -43,7 +38,6 @@ struct BottomSafeAreaBarDemoView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Erase", systemImage: "square.and.arrow.up") { }
                 }
-
                 ToolbarItem(placement: .bottomBar) {
                     Button("Write", systemImage: "pencil.and.scribble") { }
                 }
