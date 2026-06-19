@@ -33,7 +33,11 @@ struct TabSearchDemoView: View {
             Tab("Favorites", systemImage: "star") { content("Favorites", count: 12) }
 
             if searchAsRole {
-                Tab("Search", systemImage: "magnifyingglass", role: .search) {
+                Tab(
+                    "Search",
+                    systemImage: "magnifyingglass",
+                    role: .search
+                ) {
                     searchTab
                 }
             } else {
