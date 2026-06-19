@@ -10,7 +10,7 @@ struct DemoRowView: View {
                 .font(.title3)
             HStack {
                 Text("Secondary Info")
-                    .foregroundStyle(Color(.tintColor))
+                    .foregroundStyle(.tint)
                 Spacer()
             }
         }
