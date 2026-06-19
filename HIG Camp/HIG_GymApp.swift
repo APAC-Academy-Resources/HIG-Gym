@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct HIG_CampApp: App {
+struct HIG_GymApp: App {
     var body: some Scene {
         WindowGroup {
             // No root or index view
