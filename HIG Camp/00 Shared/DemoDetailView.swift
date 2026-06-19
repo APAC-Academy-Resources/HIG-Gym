@@ -2,14 +2,15 @@ import SwiftUI
 
 struct DemoDetailView: View {
     let item: String
+    var tabBarHiddenOnDetail: Bool = true
 
     var body: some View {
         ScrollView {
             Text("Detail content for \(item)")
                 .padding()
         }
-        .navigationTitle(item)
         .toolbarTitleDisplayMode(.inline)
+        .navigationTitle(item)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button("Share", systemImage: "square.and.arrow.up") { }
@@ -22,5 +23,6 @@ struct DemoDetailView: View {
                 Button("Next", systemImage: "chevron.right") { }
             }
         }
+        .toolbar(tabBarHiddenOnDetail ? .hidden : .visible, for: .tabBar)
     }
 }
