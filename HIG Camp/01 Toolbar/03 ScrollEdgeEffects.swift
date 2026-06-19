@@ -6,23 +6,26 @@ struct ScrollEdgeEffectDemoView: View {
     var body: some View {
         NavigationStack {
             DemoScrollView(count: 40)
-            .background(.red.gradient.opacity(0.7))
-            .tint(.red)
-            .scrollEdgeEffectStyle(style, for: .all)
-            .navigationTitle("Edge Effect")
-            .toolbarTitleDisplayMode(.inline)
+                .scrollEdgeEffectStyle(style, for: .all)
+                .toolbarTitleDisplayMode(.inline)
+                .navigationTitle("Edge Effect")
+                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
         }
     }
 }
 
 #Preview("Soft") {
     ScrollEdgeEffectDemoView(style: .soft)
+        .tint(.red)
 }
 
 #Preview("Hard") {
     ScrollEdgeEffectDemoView(style: .hard)
+        .tint(.purple)
 }
 
 #Preview("Automatic") {
     ScrollEdgeEffectDemoView(style: .automatic)
+        .tint(.brown)
 }
+    

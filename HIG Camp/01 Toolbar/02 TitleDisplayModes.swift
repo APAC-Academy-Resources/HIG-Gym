@@ -2,26 +2,21 @@ import SwiftUI
 
 // MARK: - List View
 
-enum ToolbarItemsVariant {
-    case leadingAndTrailing // items on both nav bar edges
-    case itemGroup          // ToolbarItemGroup with three buttons
-    case fiveItems          // five individual ToolbarItems
+enum TitleDisplayModesVariant {
+    case leadingAndTrailing
+    case itemGroup
+    case fiveItems
 }
 
-struct ToolbarTitleDemoView: View {
+struct ToolbarTitleDisplayModesDemoView: View {
     let mode: ToolbarTitleDisplayMode
-    var toolbarItems: ToolbarItemsVariant = .leadingAndTrailing
+    var titleMenu: Bool = false
+    var toolbarItems: TitleDisplayModesVariant = .leadingAndTrailing
 
-    var body: some View {
-        NavigationStack {
-            DemoScrollView(count: 20)
-            .background(.cyan.gradient.opacity(0.7))
-            .tint(.cyan)
-            .navigationTitle("Toolbar Titles")
+    private var content: some View {
+        DemoScrollView(count: 20)
             .toolbarTitleDisplayMode(mode)
-            .navigationDestination(for: String.self) { item in
-                DemoDetailView(item: item)
-            }
+            .navigationTitle("Toolbar Titles")
             .toolbar {
                 switch toolbarItems {
                 case .leadingAndTrailing:
@@ -46,6 +41,20 @@ struct ToolbarTitleDemoView: View {
                     }
                 }
             }
+            .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+    }
+
+    var body: some View {
+        NavigationStack {
+            if titleMenu {
+                content
+                    .toolbarTitleMenu {
+                        Button("Rename", systemImage: "pencil") {}
+                        Button("Delete", systemImage: "xmark.circle.fill", role: .destructive) {}
+                    }
+            } else {
+                content
+            }
         }
     }
 }
@@ -53,25 +62,36 @@ struct ToolbarTitleDemoView: View {
 // MARK: - Previews
 
 #Preview("Large Title") {
-    ToolbarTitleDemoView(mode: .large)
+    ToolbarTitleDisplayModesDemoView(mode: .large)
+        .tint(.orange)
 }
 
 #Preview("Inline Large Title") {
-    ToolbarTitleDemoView(mode: .inlineLarge)
+    ToolbarTitleDisplayModesDemoView(mode: .inlineLarge)
+        .tint(.orange)
 }
 
 #Preview("Inline Title") {
-    ToolbarTitleDemoView(mode: .inline)
+    ToolbarTitleDisplayModesDemoView(mode: .inline)
+        .tint(.orange)
+}
+
+#Preview("Inline Title w/ Title Menu") {
+    ToolbarTitleDisplayModesDemoView(mode: .inline, titleMenu: true)
+        .tint(.orange)
 }
 
 #Preview("Automatic") {
-    ToolbarTitleDemoView(mode: .automatic)
+    ToolbarTitleDisplayModesDemoView(mode: .automatic)
+        .tint(.orange)
 }
 
 #Preview("Leading + Trailing") {
-    ToolbarTitleDemoView(mode: .inline, toolbarItems: .leadingAndTrailing)
+    ToolbarTitleDisplayModesDemoView(mode: .inline, toolbarItems: .leadingAndTrailing)
+        .tint(.orange)
 }
 
 #Preview("Five Items") {
-    ToolbarTitleDemoView(mode: .inline, toolbarItems: .fiveItems)
+    ToolbarTitleDisplayModesDemoView(mode: .inline, toolbarItems: .fiveItems)
+        .tint(.orange)
 }
