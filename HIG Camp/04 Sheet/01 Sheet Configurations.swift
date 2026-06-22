@@ -3,9 +3,19 @@ import SwiftUI
 struct PresentationDetentsDemoView: View {
     var detents: Set<PresentationDetent> = [.large]
     var interactable: Bool = false
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Presentation Detents",
+        description: "Detents set the heights a sheet can rest at (medium, large, custom). Drag the sheet between them. \"Nonmodal\" lets you interact with the list behind it.",
+        systemImage: "rectangle.portrait.bottomhalf.filled"
+    )
+
+    // MARK: - Properties & Methods
     @State private var isOpen = false
     @State private var selectedDetent: PresentationDetent = .large
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             DemoScrollView(count: 20)
@@ -25,6 +35,10 @@ struct PresentationDetentsDemoView: View {
                         .presentationDetents(detents, selection: $selectedDetent)
                         .presentationDragIndicator(.visible)
                         .presentationBackgroundInteraction(interactable ? .enabled : .disabled)
+                }
+                .safeAreaBar(edge: .top) {
+                    infoCard
+                        .padding(.horizontal)
                 }
         }
     }

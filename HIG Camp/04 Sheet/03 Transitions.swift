@@ -1,18 +1,29 @@
 import SwiftUI
 
-enum TransitionsVariant {
-    case standard
-    case zoomSheet
-    case zoomCover
-}
-
 struct TransitionsDemoView: View {
-    let style: TransitionsVariant
+    // MARK: - Variant
+    enum Variant {
+        case standard
+        case zoomSheet
+        case zoomCover
+    }
+
+    let style: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Presentation Transitions",
+        description: "The zoom transition morphs the tapped control into the presented view (matchedTransitionSource + .zoom). Compare with the standard slide-up.",
+        systemImage: "arrow.up.left.and.arrow.down.right"
+    )
+
+    // MARK: - Properties & Methods
     @State private var isOpen = false
     @Namespace private var namespace
 
     private let zoomID = "zoom"
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             switch style {
@@ -64,11 +75,16 @@ struct TransitionsDemoView: View {
         }
     }
 
+    // MARK: - View Components
     private var baseList: some View {
         DemoScrollView(count: 20)
             .toolbarTitleDisplayMode(.inlineLarge)
             .navigationTitle("List")
             .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+            .safeAreaBar(edge: .bottom) {
+                infoCard
+                    .padding(.horizontal)
+            }
     }
 }
 
