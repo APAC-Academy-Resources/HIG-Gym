@@ -1,11 +1,5 @@
 import SwiftUI
 
-enum HorizontalSafeAreaBarVariant {
-    case trailing
-    case leading
-    case both
-}
-
 /// Demonstrates `safeAreaBar(edge:)` on the **horizontal** edges (`.leading` / `.trailing`).
 ///
 /// A horizontal safe area bar pins a control rail along a side and *insets* the content
@@ -14,8 +8,24 @@ enum HorizontalSafeAreaBarVariant {
 /// effect behind the bar (Liquid Glass). The `alignment:` here is a `VerticalAlignment`
 /// (`.top` / `.center` / `.bottom`); chain multiple calls to inset more than one edge.
 struct HorizontalSafeAreaBarDemoView: View {
-    let variant: HorizontalSafeAreaBarVariant
+    // MARK: - Variant
+    enum Variant {
+        case trailing
+        case leading
+        case both
+    }
 
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Horizontal Safe Area Bar",
+        description: "A side rail pinned to the leading or trailing edge. Content insets so it never slides under the rail — and the scroll edge effect still extends behind it.",
+        systemImage: "sidebar.right"
+    )
+
+    // MARK: - Properties & Methods
+    let variant: Variant
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             switch variant {
@@ -50,8 +60,9 @@ struct HorizontalSafeAreaBarDemoView: View {
         }
     }
 
+    // MARK: - View Components
     private var demoList: some View {
-        DemoScrollView(count: 35)
+        DemoScrollView(count: 35, infoCard: infoCard)
             .scrollEdgeEffectStyle(.hard, for: .horizontal)
             .toolbarTitleDisplayMode(.inline)
             .navigationTitle("Horizontal Safe Area Bar")

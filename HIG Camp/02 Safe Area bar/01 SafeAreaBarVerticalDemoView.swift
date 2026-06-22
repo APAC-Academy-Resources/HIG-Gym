@@ -1,11 +1,5 @@
 import SwiftUI
 
-enum VerticalSafeAreaBarEdge {
-    case top
-    case bottom
-    case both
-}
-
 /// Demonstrates `safeAreaBar(edge:)` on the **vertical** edges (`.top` / `.bottom`).
 ///
 /// A vertical safe area bar pins a control strip along the top or bottom and *insets*
@@ -14,6 +8,21 @@ enum VerticalSafeAreaBarEdge {
 /// with `.ultraThinMaterial`; pass `toolbar` to add a real navigation/bottom `toolbar`
 /// alongside the bar, showing how the two layout systems stack and coexist.
 struct VerticalSafeAreaBarDemoView: View {
+    // MARK: - Variant
+    enum VerticalSafeAreaBarEdge {
+        case top
+        case bottom
+        case both
+    }
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Safe Area Bars",
+        description: "This is newly introduced in iOS26. A Safe Area Bar integrates with the top or bottom toolbar. The system's scroll edge effect extends to cover the safe area bar.",
+        systemImage: "sparkles"
+    )
+
+    // MARK: - Properties & Methods
     let edge: VerticalSafeAreaBarEdge
     var showMaterial = false
     var toolbar = false
@@ -23,27 +32,31 @@ struct VerticalSafeAreaBarDemoView: View {
     @State private var bottomSelection = 0
     @State private var isOn = false
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
-            switch edge {
-            case .top:
-                demoList
-                    .safeAreaBar(edge: .top) { topBar($topSelection) }
-
-            case .bottom:
-                demoList
-                    .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection) }
-
-            case .both:
-                demoList
-                    .safeAreaBar(edge: .top) { topBar($topSelection) }
-                    .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection) }
+            Group {
+                switch edge {
+                case .top:
+                    demoList
+                        .safeAreaBar(edge: .top) { topBar($topSelection) }
+                    
+                case .bottom:
+                    demoList
+                        .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection) }
+                    
+                case .both:
+                    demoList
+                        .safeAreaBar(edge: .top) { topBar($topSelection) }
+                        .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection) }
+                }
             }
         }
     }
 
+    // MARK: - View Components
     private var demoList: some View {
-        DemoScrollView(count: 35)
+        DemoScrollView(count: 35, infoCard: infoCard)
             .scrollEdgeEffectStyle(showMaterial ? .hard : .soft, for: .vertical)
             .toolbarTitleDisplayMode(.inline)
             .navigationTitle(title ? "Safe Area Bar" : "")
@@ -82,7 +95,6 @@ struct VerticalSafeAreaBarDemoView: View {
         .padding()
     }
 
-    /// A real `toolbar` (top action + bottom bar) shown alongside the safe area bar(s).
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         if toolbar {
