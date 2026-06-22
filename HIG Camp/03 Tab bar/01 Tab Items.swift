@@ -1,74 +1,69 @@
 import SwiftUI
 
-enum TabItemVariant {
-    case textAndIcon
-    case badgeCount
-    case badgeText
-    case iconOnly
-}
-
 struct TabItemsDemoView: View {
-    let variant: TabItemVariant
+    // MARK: - Variant
+    enum Variant {
+        case textAndIcon
+        case badgeCount
+        case badgeText
+        case iconOnly
+    }
 
+    let variant: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Tab Bar Configurations",
+        description: "Tab bar acts as top level navigation",
+        systemImage: "sparkles"
+    )
+
+    // MARK: - Body
     var body: some View {
         TabView {
             switch variant {
             case .textAndIcon:
-                Tab("Inbox", systemImage: "tray") { inboxNav }
-                Tab("Drafts", systemImage: "doc") { draftsNav }
-                Tab("Sent", systemImage: "paperplane") { sentNav }
-                Tab("Settings", systemImage: "gearshape") { settingsNav }
+                Tab("Inbox", systemImage: "tray") { navStack(navigationTitle: "Inbox") }
+                Tab("Drafts", systemImage: "doc") { navStack(navigationTitle: "Drafts") }
+                Tab("Sent", systemImage: "paperplane") { navStack(navigationTitle: "Sent") }
+                Tab("Settings", systemImage: "gearshape") { navStack(navigationTitle: "Settings") }
 
             case .badgeCount:
-                Tab("Inbox", systemImage: "tray") { inboxNav }.badge(3)
-                Tab("Drafts", systemImage: "doc") { draftsNav }.badge(12)
-                Tab("Sent", systemImage: "paperplane") { sentNav }
-                Tab("Settings", systemImage: "gearshape") { settingsNav }
+                Tab("Inbox", systemImage: "tray") { navStack(navigationTitle: "Inbox") }
+                    .badge(3)
+                Tab("Drafts", systemImage: "doc") { navStack(navigationTitle: "Drafts") }
+                    .badge(12)
+                Tab("Sent", systemImage: "paperplane") { navStack(navigationTitle: "Sent") }
+                    .badge(2)
+                Tab("Settings", systemImage: "gearshape") { navStack(navigationTitle: "Settings") }
 
             case .badgeText:
-                Tab("Inbox", systemImage: "tray") { inboxNav }.badge("New")
-                Tab("Drafts", systemImage: "doc") { draftsNav }.badge("Beta")
-                Tab("Sent", systemImage: "paperplane") { sentNav }
-                Tab("Settings", systemImage: "gearshape") { settingsNav }
+                Tab("Inbox", systemImage: "tray") { navStack(navigationTitle: "Inbox") }
+                    .badge("New")
+                Tab("Drafts", systemImage: "doc") { navStack(navigationTitle: "Drafts") }
+                    .badge("Beta")
+                Tab("Sent", systemImage: "paperplane") { navStack(navigationTitle: "Sent") }
+                Tab("Settings", systemImage: "gearshape") { navStack(navigationTitle: "Settings") }
 
             case .iconOnly:
-                Tab { inboxNav } label: { Image(systemName: "tray") }
-                Tab { draftsNav } label: { Image(systemName: "doc") }
-                Tab { sentNav } label: { Image(systemName: "paperplane") }
-                Tab { settingsNav } label: { Image(systemName: "gearshape") }
+                Tab { navStack(navigationTitle: "Inbox") } label: { Image(systemName: "tray") }
+                Tab { navStack(navigationTitle: "Drafts") } label: { Image(systemName: "doc") }
+                Tab { navStack(navigationTitle: "Sent") } label: { Image(systemName: "paperplane") }
+                Tab { navStack(navigationTitle: "Settings") } label: { Image(systemName: "gearshape") }
             }
         }
     }
 
-    private var inboxNav: some View {
+    // MARK: - View Components
+    func navStack(navigationTitle: String) -> some View {
         NavigationStack {
             DemoScrollView(count: 20)
-                .navigationTitle("Inbox")
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var draftsNav: some View {
-        NavigationStack {
-            DemoScrollView(count: 10)
-                .navigationTitle("Drafts")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var sentNav: some View {
-        NavigationStack {
-            DemoScrollView(count: 15)
-                .navigationTitle("Sent")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var settingsNav: some View {
-        NavigationStack {
-            DemoScrollView(count: 8)
-                .navigationTitle("Settings")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+                .safeAreaBar(edge: .bottom) {
+                    infoCard
+                        .padding()
+                }
+                .navigationTitle(navigationTitle)
         }
     }
 }

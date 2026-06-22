@@ -1,16 +1,25 @@
 import SwiftUI
 
-enum TabCountVariant {
-    case two
-    case twoMinimize
-    case four
-    case six
-    case sixMinimize
-}
-
 struct TabCountsDemoView: View {
-    let variant: TabCountVariant
+    // MARK: - Variant
+    enum Variant {
+        case two
+        case twoMinimize
+        case four
+        case six
+        case sixMinimize
+    }
 
+    let variant: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Tab Count & Layout",
+        description: "2–6 tabs in the floating bar. With more tabs the bar widens; pair with minimize-on-scroll to reclaim space. Scroll down to see it collapse.",
+        systemImage: "square.grid.3x1.below.line.grid.1x2"
+    )
+
+    // MARK: - Body
     var body: some View {
         switch variant {
         case .two:
@@ -26,7 +35,7 @@ struct TabCountsDemoView: View {
         }
     }
 
-    // MARK: - Tab Sets
+    // MARK: - View Components
 
     private var twoTabs: some View {
         TabView {
@@ -55,14 +64,16 @@ struct TabCountsDemoView: View {
         }
     }
 
-    // MARK: - Tab Content
-
     private var homeContent: some View {
         NavigationStack {
             DemoScrollView(count: 20)
                 .background(Color(.tintColor).gradient.opacity(0.7))
                 .navigationTitle("Home")
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+                .safeAreaBar(edge: .bottom) {
+                    infoCard
+                        .padding(.horizontal)
+                }
         }
     }
 

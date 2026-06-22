@@ -1,15 +1,17 @@
 import SwiftUI
 
-enum TabViewStyleVariant {
-    case automatic
-    case sidebarAdaptable
-    case page
-    case pageWithIcons
-}
-
 struct TabViewStylesDemoView: View {
-    let variant: TabViewStyleVariant
+    // MARK: - Variant
+    enum Variant {
+        case automatic
+        case sidebarAdaptable
+        case page
+        case pageWithIcons
+    }
 
+    let variant: Variant
+
+    // MARK: - Body
     var body: some View {
         switch variant {
         case .automatic:
@@ -28,6 +30,7 @@ struct TabViewStylesDemoView: View {
         }
     }
 
+    // MARK: - View Components
     private var navigationTabView: some View {
         TabView {
             Tab("Inbox", systemImage: "tray") {

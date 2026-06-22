@@ -1,11 +1,5 @@
 import SwiftUI
 
-enum TabAccessoryVariant {
-    case basic
-    case adaptive
-    case adaptiveWithSearch
-}
-
 /// Demonstrates `tabViewBottomAccessory` — a persistent control the system places
 /// above the floating tab bar (the canonical example being Music's MiniPlayer).
 ///
@@ -13,9 +7,26 @@ enum TabAccessoryVariant {
 /// when the tab bar minimizes on scroll it moves *inline* into the tab bar (`.inline`).
 /// Read `\.tabViewBottomAccessoryPlacement` inside the accessory to adapt the layout.
 struct TabViewBottomAccessoryDemoView: View {
-    let variant: TabAccessoryVariant
+    // MARK: - Variant
+    enum Variant {
+        case basic
+        case adaptive
+        case adaptiveWithSearch
+    }
+
+    let variant: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Tab View Bottom Accessory",
+        description: "A persistent control above the tab bar (like Music's MiniPlayer). Scroll down — as the tab bar minimizes the accessory moves inline into it.",
+        systemImage: "play.square.stack"
+    )
+
+    // MARK: - Properties & Methods
     @State private var isEnabled = true
 
+    // MARK: - Body
     var body: some View {
         switch variant {
         case .basic:
@@ -32,6 +43,7 @@ struct TabViewBottomAccessoryDemoView: View {
         }
     }
 
+    // MARK: - View Components
     private var tabs: some View {
         TabView {
             Tab("Play", systemImage: "guitars") {
@@ -55,7 +67,12 @@ struct TabViewBottomAccessoryDemoView: View {
         NavigationStack {
             DemoScrollView(count: count)
                 .navigationTitle(title)
+                .toolbarTitleDisplayMode(.inlineLarge)
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+                .safeAreaBar(edge: .top) {
+                    infoCard
+                        .padding(.horizontal)
+                }
         }
     }
 }

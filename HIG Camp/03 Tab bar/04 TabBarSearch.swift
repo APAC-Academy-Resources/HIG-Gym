@@ -1,15 +1,24 @@
 import SwiftUI
 
-enum TabSearchVariant {
-    case searchRole
-    case plainTab
-    case searchRoleMinimize
-    case sidebarAdaptable
-}
-
 struct TabSearchDemoView: View {
-    let variant: TabSearchVariant
+    // MARK: - Variant
+    enum Variant {
+        case searchRole
+        case plainTab
+        case searchRoleMinimize
+        case sidebarAdaptable
+    }
 
+    let variant: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Search as a Tab Role",
+        description: "A tab with role .search gets the system's dedicated search treatment (separated, trailing). Compare with a plain tab labelled \"Search\".",
+        systemImage: "magnifyingglass"
+    )
+
+    // MARK: - Body
     var body: some View {
         switch variant {
         case .searchRole:
@@ -25,6 +34,7 @@ struct TabSearchDemoView: View {
         }
     }
 
+    // MARK: - View Components
     @ViewBuilder
     private func tabView(searchAsRole: Bool) -> some View {
         TabView {
@@ -53,6 +63,10 @@ struct TabSearchDemoView: View {
             DemoScrollView(count: count)
                 .navigationTitle(title)
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+                .safeAreaBar(edge: .bottom) {
+                    infoCard
+                        .padding(.horizontal)
+                }
         }
     }
 

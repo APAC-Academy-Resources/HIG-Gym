@@ -1,13 +1,22 @@
 import SwiftUI
 
-enum TabVisibilityVariant {
-    case alwaysVisible
-    case hiddenOnDetail
-}
-
 struct TabVisibilityDemoView: View {
-    let variant: TabVisibilityVariant
+    // MARK: - Variant
+    enum Variant {
+        case alwaysVisible
+        case hiddenOnDetail
+    }
 
+    let variant: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Tab Bar Visibility",
+        description: "Push a detail view and watch the tab bar. \"Hidden on Detail\" drops it on deeper screens; \"Always Visible\" keeps it. Tap a row to push.",
+        systemImage: "rectangle.bottomthird.inset.filled"
+    )
+
+    // MARK: - Body
     var body: some View {
         TabView {
             Tab("Browse", systemImage: "list.bullet") {
@@ -21,6 +30,10 @@ struct TabVisibilityDemoView: View {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button("Star", systemImage: "star") { }
                             }
+                        }
+                        .safeAreaBar(edge: .bottom) {
+                            infoCard
+                                .padding(.horizontal)
                         }
                 }
             }
