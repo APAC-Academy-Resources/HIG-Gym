@@ -1,6 +1,6 @@
 //
-//  VibrancyView.swift
-//  HIG Gym
+//  SampleInterface.swift
+//  HIG Camp
 //
 //  Created by George Ananda on 18/06/26.
 //
@@ -36,6 +36,18 @@ struct SampleInterface: View {
     @State var navigationTitle: String = "Demo"
     @State var titleMode: TitleModeOption = .inlineLarge
 
+    var body: some View {
+        NavigationStack {
+            DemoScrollView(count: 24, tint: pickerColor, scrollResetToken: titleMode)
+                .navigationTitle(navigationTitle)
+                .toolbarTitleDisplayMode(titleMode.displayMode)
+                .sheet(isPresented: $sheetOpen) {
+                    sheet
+                }
+        }
+        .tint(pickerColor)
+    }
+
     var sheet: some View {
         NavigationStack {
             Form {
@@ -56,18 +68,6 @@ struct SampleInterface: View {
             .navigationTitle("Configure View")
             .toolbarTitleDisplayMode(.inline)
         }
-    }
-
-    var body: some View {
-        NavigationStack {
-            DemoScrollView(count: 24, tint: pickerColor, scrollResetToken: titleMode)
-                .navigationTitle(navigationTitle)
-                .toolbarTitleDisplayMode(titleMode.displayMode)
-                .sheet(isPresented: $sheetOpen) {
-                    sheet
-                }
-        }
-        .tint(pickerColor)
     }
 }
 
