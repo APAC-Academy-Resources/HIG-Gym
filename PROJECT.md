@@ -51,8 +51,60 @@ A personal iOS 26 teaching/reference app for exploring Apple Human Interface Gui
 | `02 FullScreenCover.swift` | `fullScreenCover` |
 | `03 Transitions.swift` | Zoom transition via `matchedTransitionSource` + `navigationTransition(.zoom)` |
 
-### Root
-`SampleInterface.swift` — interactive sandbox: a Form sheet that live-drives the demo list's tint, navigation title and toolbar title display mode (scrolls to top on mode change). `ColorTest.swift` — scratch view. `HIG_GymApp.swift` — app entry (swap the root view to preview on simulator).
+### 05 System Materials
+| File | What it demos |
+|---|---|
+| `01 Materials.swift` | Material backgrounds (`.ultraThick`/`.thick`/`.regular`/`.thin`/`.ultraThinMaterial`) + `.glassEffect(.regular/.clear)` over photo / gradient / solid backgrounds, randomizable tint |
+| `02 Vibrancy.swift` | Hierarchical `foregroundStyle` (`.primary`/`.secondary`/`.tertiary`/`.quaternary`/`.quinary`) vibrancy across material types |
+
+### 06 Controls
+| File | What it demos |
+|---|---|
+| `01 Buttons.swift` | `.buttonStyle` `.borderedProminent`/`.bordered`/`.plain`/`.glass`; `.controlSize` `.mini`→`.large`; `role: .destructive`; toggleable `.disabled()`; live tint |
+| `02 Toggles & Steppers.swift` | `.toggleStyle` `.switch`/`.button`/`.automatic`; `Stepper` value + range + `step:` |
+| `03 Sliders.swift` | basic `Slider`, range, `step:`, min/max value labels, `onEditingChanged` readout |
+| `04 Pickers.swift` | `.pickerStyle` `.segmented`/`.menu`/`.wheel`/`.inline` (reuses `DemoPickerView`) + `DatePicker` `.compact`/`.graphical` |
+| `05 Progress.swift` | `ProgressView` linear/circular determinate + indeterminate, slider-driven value, tinted |
+
+### 07 Lists & Collections
+| File | What it demos |
+|---|---|
+| `01 List Styles.swift` | `.listStyle` `.plain`/`.grouped`/`.insetGrouped`/`.inset`/`.sidebar` (bottom-bar switcher) + `Section` headers/footers |
+| `02 Swipe Actions.swift` | `.swipeActions(edge:)` leading/trailing, `allowsFullSwipe`, per-button `.tint`, destructive delete |
+| `03 Context Menus.swift` | `.contextMenu` w/ `preview:`, showcases `00 Shared/DemoMenuView` |
+| `04 Grids.swift` | `LazyVGrid` adaptive / fixed / flexible `GridItem` columns |
+| `05 Edit & Selection.swift` | `EditButton`, `List(selection:)` multi-select, `.onMove`/`.onDelete` |
+| `06 Disclosure Groups.swift` | `DisclosureGroup` self-managed, bound `isExpanded`, nested |
+
+### 08 Alerts & Feedback
+| File | What it demos |
+|---|---|
+| `01 Alerts.swift` | `.alert()` simple, button roles, embedded `TextField` |
+| `02 ConfirmationDialog.swift` | `.confirmationDialog` actions, destructive, `titleVisibility` |
+| `03 Popovers.swift` | `.popover()` sheet-adaptive default + `.presentationCompactAdaptation(.popover)` |
+| `04 Empty & Status States.swift` | `ContentUnavailableView` (+ `.search`), status enum (loading/empty/error) |
+
+## Roadmap — planned topics
+
+Source: a 3-persona audit (beginner iOS student, Sketch-based product designer, Apple Developer Academy mentor) of the 5 existing sections. All three converged: the app covers UI *chrome* (toolbars, tab bars, sheets, materials) well but lacks the **system controls, content containers, and feedback patterns** needed next. Scope is deliberately **component-focused** — each planned file showcases one iOS 26 *system component* in the existing Preview format. Out of scope: Swift-language tutorials, app architecture/routing, widgets, notifications, scene management, and iPad/Mac-leaning multi-column patterns (`NavigationSplitView`). Dark mode stays a cross-cutting habit (as in `05 System Materials`); accessibility gets one dedicated section, not duplication across files.
+
+Build in tier order; preview each tier before continuing. New files auto-include via `PBXFileSystemSynchronizedRootGroup`. When a section ships, move its row up into **Current Topics** above.
+
+### Tier 2 — Visual foundations
+
+| Section | Files |
+|---|---|
+| `09 Typography` | `01 Text Styles` (`.largeTitle`→`.caption2`) · `02 Fonts` (weights, `.serif`/`.monospaced`/`.rounded`) · `03 Dynamic Type` (`@ScaledMetric`, `dynamicTypeSize`, truncation) |
+| `10 Color` | `01 Semantic Colors` (system palette, `.primary`/`.secondary`/`.fill`/`.background`) · `02 Tint & Adaptive` (`.tint()` reach, light/dark, `.mix(with:by:)`) |
+| `11 SF Symbols` | `01 Symbol Gallery` (categories, weights, scales) · `02 Rendering Modes` (monochrome/hierarchical/palette/multicolor) · `03 Symbol Effects` (`.symbolEffect`, variable value) |
+
+### Tier 3 — Structure & polish
+
+| Section | Files |
+|---|---|
+| `12 Animation & Motion` | `01 Implicit Animations` (`.animation(_:value:)`, `.bouncy`/`.smooth`) · `02 Transitions` (`.transition`, `matchedGeometryEffect`; complements `04 Sheet/03 Transitions`) · `03 Gestures` (drag/long-press/swipe, pull-to-refresh) |
+| `13 Accessibility` | `01 Labels & Hints` (`.accessibilityLabel`/`.accessibilityHint`/`.accessibilityElement(children:)`) · `02 Traits & Actions` (traits, custom actions, focus order) · `03 Forms Accessibility` (accessible labeling of `06 Controls`) |
+
 
 ## Target
 
