@@ -1,18 +1,46 @@
 import SwiftUI
 
-// MARK: - List View
-
-enum TitleDisplayModesVariant {
-    case leadingAndTrailing
-    case itemGroup
-    case fiveItems
-}
-
 struct ToolbarTitleDisplayModesDemoView: View {
+    // MARK: - Variant
+    enum Variant {
+        case leadingAndTrailing
+        case itemGroup
+        case fiveItems
+    }
+
     let mode: ToolbarTitleDisplayMode
     var titleMenu: Bool = false
-    var toolbarItems: TitleDisplayModesVariant = .leadingAndTrailing
+    var toolbarItems: Variant = .leadingAndTrailing
 
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Toolbar Title Scroll Behavior",
+        description: "Scroll down the list to observe how each title display mode adapts",
+        systemImage: "character"
+    )
+
+    // MARK: - Body
+    var body: some View {
+        NavigationStack {
+            Group {
+                if titleMenu {
+                    content
+                        .toolbarTitleMenu {
+                            Button("Rename", systemImage: "pencil") {}
+                            Button("Delete", systemImage: "xmark.circle.fill", role: .destructive) {}
+                        }
+                } else {
+                    content
+                }
+            }
+            .safeAreaBar(edge: .bottom) {
+                infoCard
+                    .padding(.horizontal)
+            }
+        }
+    }
+
+    // MARK: - View Components
     private var content: some View {
         DemoScrollView(count: 20)
             .toolbarTitleDisplayMode(mode)
@@ -43,23 +71,7 @@ struct ToolbarTitleDisplayModesDemoView: View {
             }
             .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
     }
-
-    var body: some View {
-        NavigationStack {
-            if titleMenu {
-                content
-                    .toolbarTitleMenu {
-                        Button("Rename", systemImage: "pencil") {}
-                        Button("Delete", systemImage: "xmark.circle.fill", role: .destructive) {}
-                    }
-            } else {
-                content
-            }
-        }
-    }
 }
-
-// MARK: - Previews
 
 #Preview("Large Title") {
     ToolbarTitleDisplayModesDemoView(mode: .large)

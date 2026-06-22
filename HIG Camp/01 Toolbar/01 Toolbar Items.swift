@@ -1,28 +1,64 @@
 import SwiftUI
 
-enum ToolbarItemsVariant {
-    case singleItemTopTrailing
-    case singleItemPrincipal
-    case principalTrailingItems
-    case undoRedoPlusPrimary
-    case dualClusters
-    case overflow
-    case singleItemBottom
-    case customBottom
-    case mixed
-}
-
 struct ToolbarItemsDemoView: View {
-    let variant: ToolbarItemsVariant
+    // MARK: - Variant
+    enum Variant {
+        case singleItemTopTrailing
+        case singleItemPrincipal
+        case principalTrailingItems
+        case undoRedoPlusPrimary
+        case dualClusters
+        case overflow
+        case singleItemBottom
+        case customBottom
+        case customTop
+        case mixed
+    }
+    
+    let variant: Variant
+
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Toolbar item placement",
+        description: "The top toolbar has 3 main 'slots' leading, trailing, and principal. While the bottom one is just a single large 'slot'.",
+        systemImage: "wrench.and.screwdriver.fill"
+    )
+
+    // MARK: - Properties & Methods
     @State private var selected = 1
     @State private var isOn = false
-    
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
-            scrollView
-                .toolbarTitleDisplayMode(.inline)
-                .navigationTitle("Toolbar Items")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+            content
+        }
+    }
+
+    // MARK: - View Components
+    private var base: some View {
+        DemoScrollView(count: 20)
+            .toolbarTitleDisplayMode(.inline)
+            .navigationTitle("Toolbar Items")
+            .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+            .safeAreaBar(edge: .bottom) {
+                infoCard
+                    .padding(.horizontal)
+            }
+    }
+
+    private var content: some View {
+        switch variant {
+        case .singleItemTopTrailing: AnyView(base.toolbar { singleItemTopTrailing })
+        case .singleItemPrincipal: AnyView(base.toolbar { singleItemPrincipal })
+        case .principalTrailingItems: AnyView(base.toolbar { principalTrailingItems })
+        case .undoRedoPlusPrimary: AnyView(base.toolbar { DemoSimpleTopToolbar() })
+        case .dualClusters: AnyView(base.toolbar { dualClusters })
+        case .overflow: AnyView(base.toolbar { overflow })
+        case .singleItemBottom: AnyView(base.toolbar { singleItemBottom })
+        case .customBottom: AnyView(base.toolbar { customBottom })
+        case .customTop: AnyView(base.toolbar { customTop })
+        case .mixed: AnyView(base.toolbar { mixed })
         }
     }
     
@@ -36,26 +72,9 @@ struct ToolbarItemsDemoView: View {
         }
         .accessibilityLabel("Profile")
     }
-
-    @ViewBuilder
-    private var scrollView: some View {
-        let base = DemoScrollView(count: 20)
-        switch variant {
-        case .singleItemTopTrailing: base.toolbar { singleItemTopTrailing }
-        case .singleItemPrincipal: base.toolbar { singleItemPrincipal }
-        case .principalTrailingItems: base.toolbar { principalTrailingItems }
-        case .undoRedoPlusPrimary: base.toolbar { undoRedoPlusPrimary }
-        case .dualClusters: base.toolbar { dualClusters }
-        case .overflow: base.toolbar { overflow }
-        case .singleItemBottom: base.toolbar { singleItemBottom }
-        case .customBottom: base.toolbar { customBottom }
-        case .mixed: base.toolbar { mixed }
-        }
-    }
-
+    
     @ToolbarContentBuilder
     private var singleItemTopTrailing: some ToolbarContent {
-        // Single item gets its own isolated floating pill
         ToolbarItem(placement: .topBarTrailing) {
             Button("Filter", systemImage: "line.3.horizontal.decrease") { }
         }
@@ -64,7 +83,7 @@ struct ToolbarItemsDemoView: View {
     @ToolbarContentBuilder
     private var singleItemPrincipal: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            profileImageButton()
+            profileImageButton(size: 48)
         }
     }
 
@@ -77,41 +96,23 @@ struct ToolbarItemsDemoView: View {
             Button("Bookmark", systemImage: "bookmark") { }
             Button("Favourite", systemImage: "star") { }
             Button("Tag", systemImage: "tag") { }
-            Button(
-                "Edit",
-                systemImage: "square.and.pencil"
-            ) { }
-        }
-    }
-
-    @ToolbarContentBuilder
-    private var undoRedoPlusPrimary: some ToolbarContent {
-        // Items sharing a placement cluster; different placements stay separate
-        ToolbarItemGroup(placement: .topBarLeading) {
-            Button("Undo", systemImage: "arrow.uturn.backward") { }
-            Button("Redo", systemImage: "arrow.uturn.forward") { }
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Button("Add", systemImage: "plus") { }
-                .buttonStyle(.borderedProminent)
+            Button("Edit", systemImage: "square.and.pencil") { }
         }
     }
 
     @ToolbarContentBuilder
     private var dualClusters: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarLeading) {
-            Button("Menu", systemImage: "line.3.horizontal") { }
-            Button("Back", systemImage: "chevron.left") { }
-        }
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Button("Search", systemImage: "magnifyingglass") { }
-            Button("More", systemImage: "ellipsis.circle") { }
+            EditButton()
+        }
+        ToolbarItemGroup(placement: .topBarLeading) {
+            Button("Shareplay", systemImage: "shareplay") { }
+            Button("Airplay", systemImage: "airplay.audio") { }
         }
     }
 
     @ToolbarContentBuilder
     private var overflow: some ToolbarContent {
-        // Overflow into … is automatic — the system decides the threshold
         ToolbarItemGroup(placement: .topBarLeading) {
             Button("Search", systemImage: "magnifyingglass") { }
             Button("Share", systemImage: "square.and.arrow.up") { }
@@ -156,25 +157,40 @@ struct ToolbarItemsDemoView: View {
         }
         ToolbarSpacer(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
-            Button("OK", systemImage: "checkmark", role: .confirm) { }
+            Button(role: .confirm) { }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var customTop: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            profileImageButton(size: 30)
+        }
+        ToolbarItem(placement: .principal) {
+            VStack(alignment: .center) {
+                HStack {
+                    Image(systemName: "location.fill")
+                        .font(.caption)
+                        .foregroundStyle(.blue)
+                    Text("Surabaya, ID")
+                }
+                Text("GMT+7")
+                    .foregroundStyle(.secondary)
+                    .font(.caption)
+            }
+            .frame(maxWidth: .infinity)
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button("Bookmark", systemImage:  "bookmark") { }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button(role: .confirm) { }
         }
     }
 
     @ToolbarContentBuilder
     private var mixed: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            profileImageButton()
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            Button("Search", systemImage: "sparkle.magnifyingglass") { }
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            Button("Pen", systemImage: "scribble") { }
-        }
-        ToolbarSpacer(placement: .topBarTrailing)
-        ToolbarItem(placement: .topBarTrailing) {
-            Button("Files", systemImage: "folder") { }
-        }
+        DemoMixedTopToolbar()
         ToolbarItemGroup(placement: .bottomBar) {
             Button("Back", systemImage: "chevron.backward") { }
             Button("Forward", systemImage: "chevron.forward") { }
@@ -194,36 +210,50 @@ struct ToolbarItemsDemoView: View {
 
 #Preview("Single Item Top Trailing") {
     ToolbarItemsDemoView(variant: .singleItemTopTrailing)
+        .tint(.blue)
 }
 
 #Preview("Single Item Principal") {
     ToolbarItemsDemoView(variant: .singleItemPrincipal)
+        .tint(.blue)
 }
 
 #Preview("Undo/Redo + Primary") {
     ToolbarItemsDemoView(variant: .undoRedoPlusPrimary)
+        .tint(.blue)
 }
 
 #Preview("Dual Clusters") {
     ToolbarItemsDemoView(variant: .dualClusters)
+        .tint(.blue)
 }
 
 #Preview("Overflow") {
     ToolbarItemsDemoView(variant: .overflow)
+        .tint(.blue)
 }
 
 #Preview("Single Item Bottom") {
     ToolbarItemsDemoView(variant: .singleItemBottom)
+        .tint(.blue)
 }
 
 #Preview("Custom View Bottom") {
     ToolbarItemsDemoView(variant: .customBottom)
+        .tint(.blue)
+}
+
+#Preview("Custom View Top") {
+    ToolbarItemsDemoView(variant: .customTop)
+        .tint(.blue)
 }
 
 #Preview("Mixed") {
     ToolbarItemsDemoView(variant: .mixed)
+        .tint(.blue)
 }
 
 #Preview("Principal w/ Trailing Items") {
     ToolbarItemsDemoView(variant: .principalTrailingItems)
+        .tint(.blue)
 }
