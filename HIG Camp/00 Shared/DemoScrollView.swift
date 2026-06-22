@@ -5,12 +5,17 @@ struct DemoScrollView: View {
     var tint: Color = Color(.tintColor)
     /// When this value changes, the list scrolls back to the top.
     var scrollResetToken: AnyHashable? = nil
-
+    var infoCard: DemoInfoCard?
+    
     @State private var position = ScrollPosition()
 
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
+                if let infoCard = infoCard {
+                    infoCard
+                }
+                
                 ForEach(1...count, id: \.self) { index in
                     let label = "Item \(index)"
                     NavigationLink(value: label) {
@@ -32,6 +37,9 @@ struct DemoScrollView: View {
 
 #Preview {
     NavigationStack {
-        DemoScrollView(count: 24)
+        DemoScrollView(count: 24, infoCard: DemoInfoCard(title: "Hello", description: "This is a info card to let viewers know what to pay attention to", systemImage: "star.fill"))
+            .navigationDestination(for: String.self) { item in
+                DemoDetailView(item: item)
+            }
     }
 }

@@ -6,9 +6,9 @@ struct DemoDetailView: View {
 
     var body: some View {
         ScrollView {
-            Text("Detail content for \(item)")
-                .padding()
+            DemoInfoCard(title: "Toolbar Transitions", description: "Notice how the toolbar items transitioned from the previous page to this page.")
         }
+        .contentMargins(16)
         .toolbarTitleDisplayMode(.inline)
         .navigationTitle(item)
         .toolbar {
