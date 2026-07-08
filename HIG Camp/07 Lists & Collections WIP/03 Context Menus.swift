@@ -52,7 +52,7 @@ struct ContextMenus: View {
                             }
                     }
 
-                    section("Menu button (DemoMenuView)") {
+                    section("Menu button") {
                         DemoMenuView()
                     }
                 }
@@ -61,6 +61,7 @@ struct ContextMenus: View {
             .contentMargins(16)
             .navigationTitle("Context Menus")
             .toolbarTitleDisplayMode(.inlineLarge)
+            .background(.tint.secondary)
             .toolbar {
                 toolbar
             }

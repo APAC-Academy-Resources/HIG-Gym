@@ -8,6 +8,16 @@
 import SwiftUI
 
 struct EditAndSelection: View {
+    // MARK: - Variants
+    enum Variant {
+        case reordering
+        case deleting
+        case selecting
+        case all
+    }
+    
+    let variant: Variant
+    
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Edit & selection",
@@ -16,8 +26,7 @@ struct EditAndSelection: View {
     )
 
     // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
-    @State private var items: [String] = (1...8).map { "Task \($0)" }
+    @State private var items: [String] = (1...8).map { "Item \($0)" }
     @State private var selection = Set<String>()
     @State private var tint: Color = EditAndSelection.getRandomColor()
 
@@ -32,24 +41,29 @@ struct EditAndSelection: View {
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            List(selection: $selection) {
-                Section {
-                    infoCard
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                }
+            List {
+//                Section {
+//                    Text("\(selection.count) selected")
+//                        .foregroundStyle(.tint)
+//                }
 
-                Section {
-                    Text("\(selection.count) selected")
-                        .foregroundStyle(.tint)
-                }
-
-                Section("Tasks") {
-                    ForEach(items, id: \.self) { item in
-                        Label(item, systemImage: "circle")
+                Section("Items") {
+                    switch variant {
+                    case .reordering:
+                        ForEach(items, id: \.self) { item in
+                            Text(item)
+                        }
+                        .onMove { items.move(fromOffsets: $0, toOffset: $1) }
+                    case .deleting:
+                        ForEach(items, id: \.self) { item in
+                            Text(item)
+                        }
+                        .onDelete { items.remove(atOffsets: $0) }
+                    default:
+                        ForEach(items, id: \.self) { item in
+                            Text(item)
+                        }
                     }
-                    .onMove { items.move(fromOffsets: $0, toOffset: $1) }
-                    .onDelete { items.remove(atOffsets: $0) }
                 }
             }
             .navigationTitle("Edit & Selection")
@@ -57,29 +71,28 @@ struct EditAndSelection: View {
             .toolbar {
                 toolbar
             }
+            .safeAreaBar(edge: .top, content: {
+                infoCard
+                    .padding()
+            })
             .animation(.easeInOut, value: tint)
         }
         .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
     }
 
     // MARK: - View Components
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
+        ToolbarItem(placement: .primaryAction) {
             EditButton()
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = EditAndSelection.getRandomColor()
-            }
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
         }
     }
 }
 
-#Preview {
-    EditAndSelection()
+#Preview("Reordering") {
+    EditAndSelection(variant: .reordering)
+}
+
+#Preview("Deleting") {
+    EditAndSelection(variant: .deleting)
 }

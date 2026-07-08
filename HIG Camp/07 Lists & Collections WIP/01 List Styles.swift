@@ -38,6 +38,9 @@ struct ListStyles: View {
                     infoCard
                         .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden, edges: .all)
+                } header: {
+                    Text("About this demo")
                 }
 
                 Section {
