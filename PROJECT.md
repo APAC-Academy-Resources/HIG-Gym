@@ -84,6 +84,15 @@ A personal iOS 26 teaching/reference app for exploring Apple Human Interface Gui
 | `03 Popovers.swift` | `.popover()` sheet-adaptive default + `.presentationCompactAdaptation(.popover)` |
 | `04 Empty & Status States.swift` | `ContentUnavailableView` (+ `.search`), status enum (loading/empty/error) |
 
+### 10 Text and Typography
+| File | What it demos |
+|---|---|
+| `01 Text Behaviours.swift` | `lineLimit(_:reservesSpace:)` + range, `truncationMode` head/middle/tail, `minimumScaleFactor`/`allowsTightening`, `multilineTextAlignment`/`lineSpacing`, `Text(_, format:)` units (number/currency/percent/`Measurement`/byteCount/date), `textSelection` |
+| `02 Text Styles.swift` | `Font.TextStyle` ramp `.largeTitle`→`.caption2`, `textCase`/`.bold()`/`.italic()`, `Text` + `Text` concatenation, Markdown & `AttributedString` |
+| `03 Fonts.swift` | Weights `.ultraLight`→`.black`, `fontDesign` `.serif`/`.monospaced`/`.rounded`, `fontWidth`, `.monospacedDigit()`, gradient `foregroundStyle`, `.tracking`, `.baselineOffset` |
+| `04 Dynamic Type.swift` | `@ScaledMetric`, live `dynamicTypeSize(_:)` `.xSmall`→`.accessibility5`, clamp range, reflow/truncation at large sizes |
+
+
 ## Roadmap — planned topics
 
 Source: a 3-persona audit (beginner iOS student, Sketch-based product designer, Apple Developer Academy mentor) of the 5 existing sections. All three converged: the app covers UI *chrome* (toolbars, tab bars, sheets, materials) well but lacks the **system controls, content containers, and feedback patterns** needed next. Scope is deliberately **component-focused** — each planned file showcases one iOS 26 *system component* in the existing Preview format. Out of scope: Swift-language tutorials, app architecture/routing, widgets, notifications, scene management, and iPad/Mac-leaning multi-column patterns (`NavigationSplitView`). Dark mode stays a cross-cutting habit (as in `05 System Materials`); accessibility gets one dedicated section, not duplication across files.
@@ -94,16 +103,15 @@ Build in tier order; preview each tier before continuing. New files auto-include
 
 | Section | Files |
 |---|---|
-| `09 Typography` | `01 Text Styles` (`.largeTitle`→`.caption2`) · `02 Fonts` (weights, `.serif`/`.monospaced`/`.rounded`) · `03 Dynamic Type` (`@ScaledMetric`, `dynamicTypeSize`, truncation) |
-| `10 Color` | `01 Semantic Colors` (system palette, `.primary`/`.secondary`/`.fill`/`.background`) · `02 Tint & Adaptive` (`.tint()` reach, light/dark, `.mix(with:by:)`) |
-| `11 SF Symbols` | `01 Symbol Gallery` (categories, weights, scales) · `02 Rendering Modes` (monochrome/hierarchical/palette/multicolor) · `03 Symbol Effects` (`.symbolEffect`, variable value) |
+| `11 Color` | `01 Semantic Colors` (system palette, `.primary`/`.secondary`/`.fill`/`.background`) · `02 Tint & Adaptive` (`.tint()` reach, light/dark, `.mix(with:by:)`) |
+| `12 SF Symbols` | `01 Symbol Gallery` (categories, weights, scales) · `02 Rendering Modes` (monochrome/hierarchical/palette/multicolor) · `03 Symbol Effects` (`.symbolEffect`, variable value) |
 
 ### Tier 3 — Structure & polish
 
 | Section | Files |
 |---|---|
-| `12 Animation & Motion` | `01 Implicit Animations` (`.animation(_:value:)`, `.bouncy`/`.smooth`) · `02 Transitions` (`.transition`, `matchedGeometryEffect`; complements `04 Sheet/03 Transitions`) · `03 Gestures` (drag/long-press/swipe, pull-to-refresh) |
-| `13 Accessibility` | `01 Labels & Hints` (`.accessibilityLabel`/`.accessibilityHint`/`.accessibilityElement(children:)`) · `02 Traits & Actions` (traits, custom actions, focus order) · `03 Forms Accessibility` (accessible labeling of `06 Controls`) |
+| `13 Animation & Motion` | `01 Implicit Animations` (`.animation(_:value:)`, `.bouncy`/`.smooth`) · `02 Transitions` (`.transition`, `matchedGeometryEffect`; complements `04 Sheet/03 Transitions`) · `03 Gestures` (drag/long-press/swipe, pull-to-refresh) |
+| `14 Accessibility` | `01 Labels & Hints` (`.accessibilityLabel`/`.accessibilityHint`/`.accessibilityElement(children:)`) · `02 Traits & Actions` (traits, custom actions, focus order) · `03 Forms Accessibility` (accessible labeling of `06 Controls`) |
 
 
 ## Target
