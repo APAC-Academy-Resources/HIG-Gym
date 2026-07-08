@@ -54,7 +54,7 @@ struct TextStyles: View {
                         (
                             Text("HIG ")
                                 .font(.title2).fontWeight(.black).foregroundStyle(.tint)
-                            + Text("Camp")
+                            + Text("Gym")
                                 .font(.title2).fontWeight(.light).italic()
                             + Text("  demo")
                                 .font(.caption).foregroundStyle(.secondary)
