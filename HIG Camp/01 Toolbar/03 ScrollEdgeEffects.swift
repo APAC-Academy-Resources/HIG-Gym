@@ -24,7 +24,7 @@ struct ScrollEdgeEffectDemoView: View {
         NavigationStack {
             if (variant == .hardWithMaterial) {
                 content
-                    .toolbarBackground(.thickMaterial, for: .navigationBar)
+                    .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                     .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             } else {
                 content

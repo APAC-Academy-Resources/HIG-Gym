@@ -6,6 +6,7 @@ struct ToolbarTitleDisplayModesDemoView: View {
         case leadingAndTrailing
         case itemGroup
         case fiveItems
+        case customTitle
     }
 
     let mode: ToolbarTitleDisplayMode
@@ -67,6 +68,29 @@ struct ToolbarTitleDisplayModesDemoView: View {
                         Button("Bookmark", systemImage: "bookmark") { }
                         Button("Favourite", systemImage: "star") { }
                     }
+                case .customTitle:
+                    ToolbarItem(placement: .largeTitle) {
+                        HStack {
+                            Image(systemName: "hands.sparkles.fill")
+                                .padding(6)
+                                .background(.regularMaterial)
+                                .background(.indigo)
+                                .foregroundStyle(.indigo)
+                                .clipShape(.circle)
+                            Text("Custom Large Title")
+                                .fontDesign(.serif)
+                                .foregroundStyle(.indigo)
+                                .font(.largeTitle)
+                            Spacer()
+                        }
+                        .padding(.top)
+                    }
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Page", systemImage: "text.page") { }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Filter", systemImage: "line.3.horizontal.decrease") { }
+                    }
                 }
             }
             .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
@@ -105,5 +129,10 @@ struct ToolbarTitleDisplayModesDemoView: View {
 
 #Preview("Five Items") {
     ToolbarTitleDisplayModesDemoView(mode: .inline, toolbarItems: .fiveItems)
+        .tint(.orange)
+}
+
+#Preview("Custom Title") {
+    ToolbarTitleDisplayModesDemoView(mode: .large, toolbarItems: .customTitle)
         .tint(.orange)
 }

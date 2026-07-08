@@ -4,6 +4,8 @@ struct ToolbarSearchDemoView: View {
     // MARK: - Properties & Methods
     let placement: SearchFieldPlacement
     var bottomItems: Bool = false
+    /// Contacts-style: dock the search field in the bottom bar with a leading "+".
+    var bottomSearch: Bool = false
 
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
@@ -16,7 +18,7 @@ struct ToolbarSearchDemoView: View {
     var body: some View {
         NavigationStack {
             DemoSearchView(placement: placement, prompt: "Search items")
-                .background(Color(.tintColor).opacity(0.8).gradient)
+                .background(.tint.secondary)
                 .toolbarTitleDisplayMode(.inline)
                 .navigationTitle("Search")
                 .toolbar { toolbar }
@@ -30,8 +32,7 @@ struct ToolbarSearchDemoView: View {
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Button("Add", systemImage: "plus") { }
-                .buttonStyle(.borderedProminent)
+            Button("Filter", systemImage: "line.3.horizontal.decrease") { }
         }
         ToolbarItem(placement: .topBarTrailing) {
             Button("Sort", systemImage: "arrow.up.arrow.down") { }
@@ -40,6 +41,22 @@ struct ToolbarSearchDemoView: View {
             ToolbarSpacer(placement: .bottomBar)
             ToolbarItem(placement: .bottomBar) {
                 Button("Map", systemImage: "map") { }
+            }
+        }
+        if bottomSearch {
+            DefaultToolbarItem(
+                kind: .search,
+                placement: .bottomBar
+            )
+            ToolbarSpacer(
+                .fixed,
+                placement: .bottomBar
+            )
+            ToolbarItem(placement: .bottomBar) {
+                Button(
+                    "Add",
+                    systemImage: "plus"
+                ) { }
             }
         }
     }
@@ -52,6 +69,11 @@ struct ToolbarSearchDemoView: View {
 
 #Preview("Toolbar + bottom items") {
     ToolbarSearchDemoView(placement: .toolbar, bottomItems: true)
+        .tint(.green)
+}
+
+#Preview("Bottom search + custom items") {
+    ToolbarSearchDemoView(placement: .toolbar, bottomSearch: true)
         .tint(.green)
 }
 

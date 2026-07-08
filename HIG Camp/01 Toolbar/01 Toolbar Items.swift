@@ -20,7 +20,7 @@ struct ToolbarItemsDemoView: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Toolbar item placement",
-        description: "The top toolbar has 3 main 'slots' leading, trailing, and principal. While the bottom one is just a single large 'slot'.",
+        description: "The top toolbar has 3 main slots: leading, trailing, and principal. While the bottom one is just a single large slot.",
         systemImage: "wrench.and.screwdriver.fill"
     )
 
@@ -62,15 +62,30 @@ struct ToolbarItemsDemoView: View {
         }
     }
     
-    private func profileImageButton(size: CGFloat = 32) -> some View {
-        Button { } label: {
+    private func profileImage(size: CGFloat = 32) -> some View {
             Image("g")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size, height: size)
                 .clipShape(.circle)
         }
-        .accessibilityLabel("Profile")
+    
+    private var profileLockup: some View {
+        Button {
+        } label: {
+            HStack {
+                profileImage(size: 32)
+                VStack(alignment: .leading) {
+                    Text("George Ananda")
+                    Text("HIG Snob")
+                        .font(.caption)
+                        .textCase(.uppercase)
+                        .opacity(0.6)
+                        .bold()
+                }
+            }
+        }
+        .buttonStyle(.plain)
     }
     
     @ToolbarContentBuilder
@@ -83,14 +98,14 @@ struct ToolbarItemsDemoView: View {
     @ToolbarContentBuilder
     private var singleItemPrincipal: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            profileImageButton(size: 48)
+            profileLockup
         }
     }
 
     @ToolbarContentBuilder
     private var principalTrailingItems: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            profileImageButton()
+            profileLockup
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
             Button("Bookmark", systemImage: "bookmark") { }
@@ -130,7 +145,7 @@ struct ToolbarItemsDemoView: View {
     @ToolbarContentBuilder
     private var singleItemBottom: some ToolbarContent {
         ToolbarItem(placement: .bottomBar) {
-            profileImageButton(size: 30)
+            profileImage(size: 32)
         }
         ToolbarSpacer(placement: .bottomBar)
     }
@@ -138,7 +153,7 @@ struct ToolbarItemsDemoView: View {
     @ToolbarContentBuilder
     private var customBottom: some ToolbarContent {
         ToolbarItem(placement: .bottomBar) {
-            profileImageButton(size: 30)
+            profileImage(size: 30)
         }
         ToolbarSpacer(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
@@ -164,7 +179,7 @@ struct ToolbarItemsDemoView: View {
     @ToolbarContentBuilder
     private var customTop: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            profileImageButton(size: 30)
+            profileImage(size: 30)
         }
         ToolbarItem(placement: .principal) {
             VStack(alignment: .center) {
