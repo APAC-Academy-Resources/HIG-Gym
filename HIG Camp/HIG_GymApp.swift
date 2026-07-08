@@ -1,5 +1,4 @@
 import SwiftUI
-import TipKit
 
 @main
 struct HIG_GymApp: App {
@@ -8,7 +7,7 @@ struct HIG_GymApp: App {
             // No root or index view
             // If you need to run it on the simulator,
             // change the below view to the view you'd like to preview
-            MenuDemo()
+            PourOverExperimentView(feel: .pastel)
         }
     }
 }
