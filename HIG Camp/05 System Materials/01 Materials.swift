@@ -20,7 +20,7 @@ struct Materials: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Material as background",
-        description: "The different materials apply different levels of transparency and background blur. Try scrolling down, and observe how the card interacts with the background",
+        description: "Observe how the cards interacts with the window background",
         systemImage: "lightspectrum.horizontal"
     )
     
@@ -54,37 +54,27 @@ struct Materials: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 36) {
-                    card(material: "Ultra Thick Material")
-                            .background(.ultraThickMaterial, in: cardShape)
+                LazyVStack(alignment: .leading, spacing: 28, pinnedViews: [.sectionHeaders]) {
+                    standardMaterialsSection
 
-                    card(material: "Thick Material")
-                        .background(.thickMaterial, in: cardShape)
+                    Spacer()
 
-                    card(material: "Regular Material")
-                        .background(.regularMaterial, in: cardShape)
+                    liquidGlassSection
 
-                    card(material: "Thin Material")
-                        .background(.thinMaterial, in: cardShape)
+                    Spacer()
 
-                    card(material: "Ultra Thin Material")
-                        .background(.ultraThinMaterial, in: cardShape)
-
-                    card(material: "Regular Glass")
-                        .glassEffect(.regular, in: cardShape)
-
-                    card(material: "Clear Glass")
-                        .glassEffect(.clear, in: cardShape)
-                    
-                    card(material: "Window Background")
-                        .background(.windowBackground, in: cardShape)
+                    semanticMaterialsSection
                 }
-                .padding(.vertical)
+                .padding(.bottom)
             }
             .contentMargins(.horizontal, 16)
             .background { background }
             .navigationTitle("Materials")
             .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbarBackgroundVisibility(
+                .visible, for: .navigationBar)
+            .toolbarBackground(.bar, for: .navigationBar)
+            .scrollEdgeEffectStyle(.hard, for: .top)
             .toolbar {
                 toolbar
             }
@@ -99,6 +89,54 @@ struct Materials: View {
     }
 
     // MARK: - View Components
+    private var standardMaterialsSection: some View {
+        Section {
+            card(material: "Ultra Thick Material")
+                .background(.ultraThickMaterial, in: cardShape)
+
+            card(material: "Thick Material")
+                .background(.thickMaterial, in: cardShape)
+
+            card(material: "Regular Material")
+                .background(.regularMaterial, in: cardShape)
+
+            card(material: "Thin Material")
+                .background(.thinMaterial, in: cardShape)
+
+            card(material: "Ultra Thin Material")
+                .background(.ultraThinMaterial, in: cardShape)
+
+            card(material: "Bar")
+                .background(.bar, in: cardShape)
+        } header: {
+            sectionHeader(title: "Standard Materials")
+        }
+    }
+
+    private var liquidGlassSection: some View {
+        Section {
+            card(material: "Regular Glass")
+                .glassEffect(.regular, in: cardShape)
+
+            card(material: "Clear Glass")
+                .glassEffect(.clear, in: cardShape)
+        } header: {
+            sectionHeader(title: "Liquid Glass")
+        }
+    }
+
+    private var semanticMaterialsSection: some View {
+        Section {
+            card(material: "Background")
+                .background(.background, in: cardShape)
+
+            card(material: "Fill")
+                .background(.fill, in: cardShape)
+        } header: {
+            sectionHeader(title: "Semantic Materials")
+        }
+    }
+
     @ViewBuilder
     var background: some View {
         switch variant {
@@ -114,6 +152,21 @@ struct Materials: View {
                 .ignoresSafeArea()
                 .opacity(0.5)
         }
+    }
+    
+    func sectionHeader(title: String) -> some View {
+        Text(title)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .textCase(.uppercase)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.bar)
+            .padding(.horizontal, -16)
+            .overlay(alignment: .top) {
+                Divider()
+                    .padding(.horizontal, -16)
+            }
     }
     
     @ToolbarContentBuilder
@@ -166,19 +219,8 @@ struct Materials: View {
                     .bold()
                     .foregroundStyle(.tint)
 
-                Rectangle()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 2)
-                    .foregroundStyle(.fill.secondary)
-
-                VStack {
-                    Image(systemName: "airplane")
-                        .foregroundStyle(.tint)
-                }
-                Rectangle()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 2)
-                    .foregroundStyle(.fill.secondary)
+                Gauge(value: 0.7) { }
+                    .gaugeStyle(.accessoryLinearCapacity)
 
                 Text("SFO")
                     .bold()

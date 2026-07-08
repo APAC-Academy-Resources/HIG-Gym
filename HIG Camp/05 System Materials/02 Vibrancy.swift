@@ -26,6 +26,12 @@ struct Vibrancy: View {
                     infoCard
                         .tint(selectedColor)
 
+                    sampleCard("Background")
+                        .background(
+                            .background,
+                            in: cardShape
+                        )
+                    
                     sampleCard("Regular Material")
                         .background(
                             .regularMaterial,
@@ -40,13 +46,7 @@ struct Vibrancy: View {
 
                     sampleCard("Ultra Thick Material")
                         .background(
-                            .ultraThickMaterial,
-                            in: cardShape
-                        )
-
-                    sampleCard("Window Background")
-                        .background(
-                            .windowBackground,
+                        .ultraThickMaterial,
                             in: cardShape
                         )
 
@@ -129,6 +129,10 @@ struct Vibrancy: View {
             }
 
             Spacer()
+            
+            Text("Body Primary as Section")
+            
+            Divider()
 
             Text("Body Secondary. Every element in this card does not specify any specific colors, instead it uses the system's hierarchical foreground styles (this body text uses the 'secondary' style). The result is the components adapt to the background. It dynamically samples the color behind the card's \(background) background.")
                 .font(.body)
