@@ -66,21 +66,23 @@ struct BrandTheme {
         case .lab:
             return BrandTheme(
                 background: Color.hex(0x0E1113), card: Color.hex(0x1A1F23),
-                accent: Color.hex(0x00E0C6), accent2: Color.hex(0xF5A623),
+                accent: Color.orange,
+                accent2: Color.orange,
                 text: Color.hex(0xE8EDF0), muted: Color.hex(0x6E7C85),
-                titleFont: .system(.title2, design: .default).weight(.bold),
-                headlineFont: .system(.subheadline, design: .default).weight(.semibold),
+                titleFont: .system(.title2, design: .default).width(.expanded).weight(.bold),
+                headlineFont: .system(.subheadline, design: .default).width(.expanded).weight(.semibold),
                 bodyFont: .system(.footnote, design: .default),
-                statFont: .system(.caption, design: .monospaced),
-                labelFont: .system(.caption2, design: .monospaced),
+                statFont: .system(.caption, design: .default),
+                labelFont: .system(.caption2, design: .default).width(.condensed),
                 uppercaseLabels: true, labelTracking: 2,
-                cardCorner: 3, cardStroke: Color.hex(0x6E7C85).opacity(0.5),
+                cardCorner: 18, cardStroke: Color.orange.opacity(0),
                 cardShadow: nil, chip: .tag,
                 titleMode: .inlineLarge,
                 heroKicker: "BEAN // WK 28", heroName: "GUJI ETHIOPIA",
                 heroNotes: "1:16 · 94°C · 2:45",
                 heroBlurb: "Extraction 21.3% · Light roast · Washed process.",
-                cafesHeading: "ROASTERS", brewsHeading: "BREW LOG",
+                cafesHeading: "ROASTERS",
+                brewsHeading: "BREW LOG",
                 heroText: .white)
 
         case .pastel:
@@ -216,7 +218,7 @@ struct PourOverExperimentView: View {
     private var largeTitleFont: Font {
         switch feel {
         case .kraft:  return .system(.largeTitle, design: .serif).weight(.semibold)
-        case .lab:    return .system(.largeTitle, design: .monospaced).weight(.bold)
+        case .lab:    return .system(.largeTitle, design: .default).bold().width(.expanded)
         case .pastel: return .system(.largeTitle, design: .rounded).weight(.heavy)
         case .native: return .largeTitle
         }
