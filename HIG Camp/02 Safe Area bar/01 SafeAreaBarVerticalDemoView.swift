@@ -43,7 +43,8 @@ struct VerticalSafeAreaBarDemoView: View {
                     
                 case .bottom:
                     demoList
-                        .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection) }
+                        .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection)
+                        }
                     
                 case .both:
                     demoList
@@ -76,19 +77,7 @@ struct VerticalSafeAreaBarDemoView: View {
         HStack {
             Text("SFO")
                 .bold()
-
-            Rectangle()
-                .frame(maxWidth: .infinity)
-                .frame(height: 6)
-                .foregroundStyle(.tint)
-            VStack {
-                Image(systemName: "airplane")
-            }
-            Rectangle()
-                .frame(maxWidth: .infinity)
-                .frame(height: 6)
-                .foregroundStyle(.tint)
-
+            Gauge(value: 0.7) { }
             Text("CGK")
                 .bold()
         }
@@ -99,7 +88,7 @@ struct VerticalSafeAreaBarDemoView: View {
     private var toolbarContent: some ToolbarContent {
         if toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Add", systemImage: "plus") { }
+                Button("Add", systemImage: "airplane") { }
             }
             ToolbarItem(placement: .bottomBar) {
                 Toggle(isOn: $isOn) {
