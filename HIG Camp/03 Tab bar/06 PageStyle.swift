@@ -3,8 +3,6 @@ import SwiftUI
 struct TabViewStylesDemoView: View {
     // MARK: - Variant
     enum Variant {
-        case automatic
-        case sidebarAdaptable
         case page
         case pageWithIcons
     }
@@ -14,11 +12,6 @@ struct TabViewStylesDemoView: View {
     // MARK: - Body
     var body: some View {
         switch variant {
-        case .automatic:
-            navigationTabView
-        case .sidebarAdaptable:
-            navigationTabView
-                .tabViewStyle(.sidebarAdaptable)
         case .page:
             pageTabView
                 .tabViewStyle(.page)
@@ -76,16 +69,16 @@ struct TabViewStylesDemoView: View {
     
     private var pageTabViewWithIcons: some View {
         TabView {
-            Tab("First", systemImage: "checkmark") {
+            Tab("First", systemImage: "1.circle") {
                 pageContent("First")
             }
-            Tab("Second", systemImage: "pencil.tip.crop.circle.fill") {
+            Tab("Second", systemImage: "2.circle") {
                 pageContent("Second")
             }
-            Tab("Third", systemImage: "dot.fill") {
+            Tab("Third", systemImage: "3.circle") {
                 pageContent("Third")
             }
-            Tab("Fourth", systemImage: "sunglasses.fill") {
+            Tab("Fourth", systemImage: "4.circle") {
                 pageContent("Fourth")
             }
         }
@@ -93,33 +86,28 @@ struct TabViewStylesDemoView: View {
     }
 
     private func pageContent(_ title: String) -> some View {
-        NavigationStack {
-            VStack {
-                VStack(alignment: .center) {
-                    Text(title)
-                        .font(.largeTitle)
-                        .bold()
-                    Text("Page")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                }
+        VStack {
+            VStack(alignment: .center) {
+                Text(title)
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundStyle(.primary)
+                Text("Page")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
             }
-            .padding(62)
-            .glassEffect(in: RoundedRectangle(cornerRadius: 48, style: .continuous))
-            .background(
-                Color(.tintColor).gradient,
-                in: RoundedRectangle(cornerRadius: 48, style: .continuous)
-            )
         }
+        .fixedSize()
+        .frame(width: 240, height: 240)
+        .background(
+            .regularMaterial,
+            in: RoundedRectangle(cornerRadius: 48, style: .continuous)
+        )
+        .background(
+            .tint,
+            in: RoundedRectangle(cornerRadius: 48, style: .continuous)
+        )
     }
-}
-
-#Preview("Automatic") {
-    TabViewStylesDemoView(variant: .automatic)
-}
-
-#Preview("Sidebar Adaptable (best on iPad)") {
-    TabViewStylesDemoView(variant: .sidebarAdaptable)
 }
 
 #Preview("Page") {

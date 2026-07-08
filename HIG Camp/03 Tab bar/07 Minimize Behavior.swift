@@ -33,7 +33,6 @@ struct TabBarMinimizeDemoView: View {
     private func content(title: String, color: Color, count: Int) -> some View {
         NavigationStack {
             DemoScrollView(count: count)
-                .background(color.gradient.opacity(0.7))
                 .tint(color)
                 .navigationTitle(title)
                 .toolbarTitleDisplayMode(.inlineLarge)

@@ -33,7 +33,7 @@ struct TabVisibilityDemoView: View {
                         }
                         .safeAreaBar(edge: .bottom) {
                             infoCard
-                                .padding(.horizontal)
+                                .padding()
                         }
                 }
             }

@@ -65,7 +65,7 @@ struct TabSearchDemoView: View {
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
                 .safeAreaBar(edge: .bottom) {
                     infoCard
-                        .padding(.horizontal)
+                        .padding()
                 }
         }
     }
