@@ -11,12 +11,12 @@ struct DemoModalView: View {
                 .navigationTitle(title)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Ok", systemImage: "checkmark") {
+                        Button(role: .confirm) {
                             isOpen.toggle()
                         }
                     }
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel", systemImage: "xmark") {
+                        Button(role: .cancel) {
                             isOpen.toggle()
                         }
                     }

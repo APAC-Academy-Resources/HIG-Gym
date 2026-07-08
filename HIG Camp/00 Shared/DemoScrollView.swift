@@ -27,7 +27,7 @@ struct DemoScrollView: View {
             .padding(.vertical)
         }
         .scrollPosition($position)
-        .background(tint.gradient.opacity(0.5))
+        .background(tint.gradient.secondary)
         .contentMargins(.horizontal, 16, for: .automatic)
         .onChange(of: scrollResetToken) {
             withAnimation { position.scrollTo(edge: .top) }

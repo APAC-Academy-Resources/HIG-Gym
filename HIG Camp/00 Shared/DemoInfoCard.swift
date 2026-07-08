@@ -33,7 +33,7 @@ struct DemoInfoCard: View {
         .frame(maxWidth: .infinity)
         .padding(.horizontal)
         .padding(.vertical, 24)
-        .background(.windowBackground, in: RoundedRectangle(cornerRadius: 24))
+        .background(.background, in: RoundedRectangle(cornerRadius: 24))
     }
 }
 

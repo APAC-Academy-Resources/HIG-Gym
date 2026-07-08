@@ -31,12 +31,17 @@ struct DemoSearchView: View {
                     NavigationLink(value: item) {
                         DemoRowView(label: item)
                     }
+                    .buttonStyle(.plain)
                 }
             }
             .padding(.vertical)
         }
         .contentMargins(.horizontal, 16, for: .automatic)
-        .searchable(text: $searchText, placement: placement, prompt: prompt)
+        .searchable(
+            text: $searchText,
+            placement: placement,
+            prompt: prompt
+        )
         .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
     }
 }
