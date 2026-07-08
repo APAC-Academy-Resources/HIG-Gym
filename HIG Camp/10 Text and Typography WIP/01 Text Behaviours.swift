@@ -115,25 +115,6 @@ struct TextBehaviours: View {
                         Slider(value: $lineSpacing, in: 0...16)
                     }
 
-                    section("Format styles (units)") {
-                        Grid(alignment: .leading, verticalSpacing: 12) {
-                            formatRow("Number – 1234.5", Text(1234.5, format: .number))
-                            Divider()
-                            formatRow("Currency – 29.99", Text(29.99, format: .currency(code: "USD")))
-                            Divider()
-                            formatRow("Percent – 0.87", Text(0.87, format: .percent))
-                            Divider()
-                            formatRow("Distance – 5", Text(Measurement(value: 5, unit: UnitLength.kilometers), format: .measurement(width: .abbreviated)))
-                            Divider()
-                            formatRow("Byte count – 1500000", Text(1_500_000, format: .byteCount(style: .file)))
-                            Divider()
-                            formatRow("Date", Text(sampleDate, format: .dateTime.day().month().year()))
-                            Divider()
-                            formatRow("Date – Two Digits", Text(sampleDate, format: .dateTime.day().month(.twoDigits).year(.twoDigits)))
-                        }
-                        caption("`Text(_, format:)` turns raw values into localized, unit-aware strings — no manual string interpolation.")
-                    }
-
                     section("Text selection") {
                         Text("Press and hold to select and copy this text.")
                             .textSelection(.enabled)
@@ -166,13 +147,6 @@ struct TextBehaviours: View {
         }
         ToolbarItem(placement: .primaryAction) {
             Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
-        }
-    }
-
-    func formatRow(_ title: String, _ value: Text) -> some View {
-        GridRow {
-            Text(title).foregroundStyle(.secondary)
-            value.gridColumnAlignment(.trailing).frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 
