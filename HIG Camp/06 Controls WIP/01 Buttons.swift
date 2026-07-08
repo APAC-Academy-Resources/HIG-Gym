@@ -19,7 +19,8 @@ struct Buttons: View {
     @State private var darkModeOn: Bool = false
     @State private var isDisabled: Bool = false
     @State private var tint: Color = Buttons.getRandomColor()
-    @State private var pageButtonStyle: ButtonStyleOption = .bordered
+    @State private var pageButtonStyle: ButtonStyleOption = .borderedProminent
+    @State private var pastedString = ""
     
     static func getRandomColor() -> Color {
         Color(
@@ -100,6 +101,71 @@ struct Buttons: View {
                         }
                     }
                     .primitiveButtonStyle(pageButtonStyle)
+
+                    section("Button labels") {
+                        Grid(alignment: .leading, verticalSpacing: 12) {
+                            GridRow {
+                                Text("Title & icon")
+                                    .foregroundStyle(.secondary)
+                                Button("Add", systemImage: "plus") {}
+                                    .gridColumnAlignment(.center)
+                            }
+                            Divider()
+                            GridRow {
+                                Text("Icon only")
+                                    .foregroundStyle(.secondary)
+                                Button("Add", systemImage: "plus") {}
+                                    .labelStyle(.iconOnly)
+                            }
+                            Divider()
+                            GridRow {
+                                Text("Title only")
+                                    .foregroundStyle(.secondary)
+                                Button("Add", systemImage: "plus") {}
+                                    .labelStyle(.titleOnly)
+                            }
+                            Divider()
+                            GridRow {
+                                Text("Custom label")
+                                    .foregroundStyle(.secondary)
+                                Button {
+                                } label: {
+                                    Text("Favorite")
+                                        .foregroundStyle(LinearGradient(colors: [.white, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                        .bold()
+                                    Image(systemName: "star.fill")
+                                        .foregroundStyle(.yellow)
+                                }
+                            }
+                            Divider()
+                                .padding(.bottom)
+                            Text("Pass a `systemImage` to the title initializer, or build a `Label` for full control. Use `.labelStyle(.iconOnly)` to hide the title.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .primitiveButtonStyle(pageButtonStyle)
+                    
+                    section("System buttons") {
+                        Grid(alignment: .leading, verticalSpacing: 12) {
+                            GridRow {
+                                Text("Edit Button")
+                                EditButton()
+                            }
+                            Divider()
+                            GridRow {
+                                Text("Rename Button")
+                                RenameButton()
+                            }
+                            Divider()
+                            GridRow {
+                                Text("Paste Button \(self.pastedString)")
+                                PasteButton(payloadType: String.self) { strings in
+                                    pastedString = strings[0]
+                                }
+                            }
+                        }
+                    }
                 }
                 .disabled(isDisabled)
                 .padding(.vertical)

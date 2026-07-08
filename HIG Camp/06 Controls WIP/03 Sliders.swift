@@ -64,6 +64,7 @@ struct Sliders: View {
                         Slider(value: $stepped, in: 0...10, step: 1) { editing in
                             isEditing = editing
                         }
+                        .sliderThumbVisibility(.visible)
                         Label(
                             isEditing ? "Dragging" : "Idle",
                             systemImage: isEditing ? "hand.draw.fill" : "hand.raised.slash"
@@ -75,6 +76,7 @@ struct Sliders: View {
                 .padding(.vertical)
             }
             .contentMargins(16)
+            .background(.tint.secondary)
             .navigationTitle("Sliders")
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
@@ -110,7 +112,7 @@ struct Sliders: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(24)
-        .background(.windowBackground, in: RoundedRectangle(cornerRadius: 24))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
     }
 }
 

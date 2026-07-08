@@ -48,11 +48,6 @@ struct ProgressDemo: View {
                         ProgressView("Downloading", value: progress)
                     }
 
-                    section("Circular (Determinate)") {
-                        ProgressView(value: progress)
-                            .progressViewStyle(.circular)
-                    }
-
                     section("Indeterminate") {
                         ProgressView()
                         ProgressView("Loading…")

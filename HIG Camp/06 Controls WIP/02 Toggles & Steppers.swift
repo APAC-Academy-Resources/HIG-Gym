@@ -40,10 +40,18 @@ struct TogglesAndSteppers: View {
                     infoCard
 
                     section("Toggle Styles") {
+                        Divider()
                         Toggle("Switch", isOn: $switchOn)
                             .toggleStyle(.switch)
-                        Toggle("Button", systemImage: "star.fill", isOn: $buttonOn)
-                            .toggleStyle(.button)
+                        Divider()
+                        HStack {
+                            Text("Button")
+                            Spacer()
+                            Toggle("Light", systemImage: "sun.max.fill", isOn: $buttonOn)
+                                .toggleStyle(.button)
+                                .labelStyle(.iconOnly)
+                        }
+                        Divider()
                         Toggle("Automatic", isOn: $automaticOn)
                             .toggleStyle(.automatic)
                     }
@@ -61,6 +69,7 @@ struct TogglesAndSteppers: View {
                 .padding(.vertical)
             }
             .contentMargins(16)
+            .background(.tint.secondary)
             .navigationTitle("Toggles & Steppers")
             .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
@@ -96,7 +105,7 @@ struct TogglesAndSteppers: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(24)
-        .background(.windowBackground, in: RoundedRectangle(cornerRadius: 24))
+        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 24))
     }
 }
 
