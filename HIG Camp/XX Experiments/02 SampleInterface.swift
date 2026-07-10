@@ -42,6 +42,7 @@ struct SampleInterface: View {
                 .navigationTitle(navigationTitle)
                 .toolbarTitleDisplayMode(titleMode.displayMode)
                 .sheet(isPresented: $sheetOpen) {
+                 
                     sheet
                 }
         }
