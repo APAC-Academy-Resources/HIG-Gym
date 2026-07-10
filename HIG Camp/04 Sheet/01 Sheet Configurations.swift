@@ -3,6 +3,7 @@ import SwiftUI
 struct PresentationDetentsDemoView: View {
     var detents: Set<PresentationDetent> = [.large]
     var interactable: Bool = false
+    var useMiniToolbar: Bool = false
 
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
@@ -31,7 +32,7 @@ struct PresentationDetentsDemoView: View {
                     }
                 }
                 .sheet(isPresented: $isOpen) {
-                    DemoModalView(isOpen: $isOpen)
+                    DemoModalView(isOpen: $isOpen, useMiniToolbar: useMiniToolbar)
                         .presentationDetents(detents, selection: $selectedDetent)
                         .presentationDragIndicator(.visible)
                         .presentationBackgroundInteraction(interactable ? .enabled : .disabled)
@@ -52,6 +53,10 @@ struct PresentationDetentsDemoView: View {
 #Preview("Medium") {
     PresentationDetentsDemoView(detents: [.medium])
         .tint(.indigo)
+}
+
+#Preview("Medium with 34pt close") {
+    PresentationDetentsDemoView(detents: [.medium], useMiniToolbar: true)
 }
 
 #Preview("Custom Short") {
