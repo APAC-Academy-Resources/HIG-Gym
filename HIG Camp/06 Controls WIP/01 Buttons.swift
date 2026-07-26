@@ -2,12 +2,10 @@
 //  01 Buttons.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 21/06/26.
-//
 
 import SwiftUI
 
-struct Buttons: View {
+struct ButtonsDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Button styles & roles",
@@ -15,176 +13,167 @@ struct Buttons: View {
         systemImage: "hand.tap.fill"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
+    // MARK: - State
     @State private var isDisabled: Bool = false
-    @State private var tint: Color = Buttons.getRandomColor()
     @State private var pageButtonStyle: ButtonStyleOption = .borderedProminent
     @State private var pastedString = ""
-    
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    infoCard
-
-                    buttonStyles
-
-                    section("Control Sizes") {
-                        HStack {
-                            Button("Small") {}
-                                .controlSize(.small)
-                            
-                            Button("Small Flexible") {}
-                                .controlSize(.small)
-                                .buttonSizing(.flexible)
-                        }
-                        HStack {
-                            Button("Regular") {}
-                                .controlSize(.regular)
-                            
-                            Button("Regular Flexible") {}
-                                .controlSize(.regular)
-                                .buttonSizing(.flexible)
-                        }
-                        HStack {
-                            Button("Large") {}
-                                .controlSize(.large)
-                            
-                            Button("Large Flexible") {}
-                                .controlSize(.large)
-                                .buttonSizing(.flexible)
-                        }
-                    }
-                    .primitiveButtonStyle(pageButtonStyle)
-
-                    section("Roles") {
-                        Grid(alignment: .leading) {
-                            GridRow {
-                                Text("Cancel")
-                                    .foregroundStyle(.secondary)
-                                Button(role: .cancel) {}
-                                    .gridColumnAlignment(.center)
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Close")
-                                    .foregroundStyle(.secondary)
-                                Button(role: .close) {}
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Confirm")
-                                    .foregroundStyle(.secondary)
-                                Button(role: .confirm) {}
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Destructive")
-                                    .foregroundStyle(.secondary)
-                                Button(role: .destructive) {}
-                            }
-                            Divider()
-                                .padding(.bottom)
-                            Text("The button roles determine the labels of each button.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .primitiveButtonStyle(pageButtonStyle)
-
-                    section("Button labels") {
-                        Grid(alignment: .leading, verticalSpacing: 12) {
-                            GridRow {
-                                Text("Title & icon")
-                                    .foregroundStyle(.secondary)
-                                Button("Add", systemImage: "plus") {}
-                                    .gridColumnAlignment(.center)
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Icon only")
-                                    .foregroundStyle(.secondary)
-                                Button("Add", systemImage: "plus") {}
-                                    .labelStyle(.iconOnly)
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Title only")
-                                    .foregroundStyle(.secondary)
-                                Button("Add", systemImage: "plus") {}
-                                    .labelStyle(.titleOnly)
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Custom label")
-                                    .foregroundStyle(.secondary)
-                                Button {
-                                } label: {
-                                    Text("Favorite")
-                                        .foregroundStyle(LinearGradient(colors: [.white, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                        .bold()
-                                    Image(systemName: "star.fill")
-                                        .foregroundStyle(.yellow)
-                                }
-                            }
-                            Divider()
-                                .padding(.bottom)
-                            Text("Pass a `systemImage` to the title initializer, or build a `Label` for full control. Use `.labelStyle(.iconOnly)` to hide the title.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .primitiveButtonStyle(pageButtonStyle)
-                    
-                    section("System buttons") {
-                        Grid(alignment: .leading, verticalSpacing: 12) {
-                            GridRow {
-                                Text("Edit Button")
-                                EditButton()
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Rename Button")
-                                RenameButton()
-                            }
-                            Divider()
-                            GridRow {
-                                Text("Paste Button \(self.pastedString)")
-                                PasteButton(payloadType: String.self) { strings in
-                                    pastedString = strings[0]
-                                }
-                            }
-                        }
+        DemoPage("Buttons", info: infoCard, toolbar: {
+            ToolbarItem(placement: .primaryAction) {
+                Toggle("Disabled", systemImage: "nosign", isOn: $isDisabled)
+            }
+            ToolbarSpacer(.flexible, placement: .bottomBar)
+            ToolbarItem(placement: .bottomBar) {
+                Picker("Button Style", selection: $pageButtonStyle) {
+                    ForEach(ButtonStyleOption.allCases) { style in
+                        Text(style.label).tag(style)
                     }
                 }
-                .disabled(isDisabled)
-                .padding(.vertical)
+                .pickerStyle(.menu)
+                .fixedSize()
             }
-            .contentMargins(16)
-            .navigationTitle("Buttons")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                toolbar
+        }) { _ in
+            Group {
+                buttonStyles
+
+                DemoSection("Control Sizes") {
+                    HStack {
+                        Button("Small") {}
+                            .controlSize(.small)
+
+                        Button("Small Flexible") {}
+                            .controlSize(.small)
+                            .buttonSizing(.flexible)
+                    }
+                    HStack {
+                        Button("Regular") {}
+                            .controlSize(.regular)
+
+                        Button("Regular Flexible") {}
+                            .controlSize(.regular)
+                            .buttonSizing(.flexible)
+                    }
+                    HStack {
+                        Button("Large") {}
+                            .controlSize(.large)
+
+                        Button("Large Flexible") {}
+                            .controlSize(.large)
+                            .buttonSizing(.flexible)
+                    }
+                    caption("`.controlSize(_:)` scales the whole control, not just its label; `.buttonSizing(.flexible)` lets it stretch to fill the space it is offered.")
+                }
+                .primitiveButtonStyle(pageButtonStyle)
+
+                DemoSection("Roles") {
+                    Grid(alignment: .leading) {
+                        GridRow {
+                            Text("Cancel")
+                                .foregroundStyle(.secondary)
+                            Button(role: .cancel) {}
+                                .gridColumnAlignment(.center)
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Close")
+                                .foregroundStyle(.secondary)
+                            Button(role: .close) {}
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Confirm")
+                                .foregroundStyle(.secondary)
+                            Button(role: .confirm) {}
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Destructive")
+                                .foregroundStyle(.secondary)
+                            Button(role: .destructive) {}
+                        }
+                        Divider()
+                            .padding(.bottom)
+                        Text("The button roles determine the labels of each button.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .primitiveButtonStyle(pageButtonStyle)
+
+                DemoSection("Button labels") {
+                    Grid(alignment: .leading, verticalSpacing: 12) {
+                        GridRow {
+                            Text("Title & icon")
+                                .foregroundStyle(.secondary)
+                            Button("Add", systemImage: "plus") {}
+                                .gridColumnAlignment(.center)
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Icon only")
+                                .foregroundStyle(.secondary)
+                            Button("Add", systemImage: "plus") {}
+                                .labelStyle(.iconOnly)
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Title only")
+                                .foregroundStyle(.secondary)
+                            Button("Add", systemImage: "plus") {}
+                                .labelStyle(.titleOnly)
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Custom label")
+                                .foregroundStyle(.secondary)
+                            Button {
+                            } label: {
+                                Text("Favorite")
+                                    .foregroundStyle(LinearGradient(colors: [.white, .yellow], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .bold()
+                                Image(systemName: "star.fill")
+                                    .foregroundStyle(.yellow)
+                            }
+                        }
+                        Divider()
+                            .padding(.bottom)
+                        Text("Pass a `systemImage` to the title initializer, or build a `Label` for full control. Use `.labelStyle(.iconOnly)` to hide the title.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .primitiveButtonStyle(pageButtonStyle)
+
+                DemoSection("System buttons") {
+                    Grid(alignment: .leading, verticalSpacing: 12) {
+                        GridRow {
+                            Text("Edit Button")
+                            EditButton()
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Rename Button")
+                            RenameButton()
+                        }
+                        Divider()
+                        GridRow {
+                            Text("Paste Button \(self.pastedString)")
+                            PasteButton(payloadType: String.self) { strings in
+                                pastedString = strings[0]
+                            }
+                        }
+                    }
+                    caption("`EditButton`, `RenameButton` and `PasteButton` are system-supplied — they carry their own title, action and, for paste, the privacy-safe pasteboard access.")
+                }
             }
-            .animation(.easeInOut, value: tint)
-            .background(.tint.opacity(0.5))
+            .disabled(isDisabled)
         }
-        .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
     }
 
     // MARK: - View Components
-    var buttonStyles: some View {
+    private var buttonStyles: some View {
         TabView {
             Tab {
                 buttonPage
@@ -262,8 +251,8 @@ struct Buttons: View {
             }
         }
     }
-    
-    var buttonPage: some View {
+
+    private var buttonPage: some View {
         RoundedRectangle(cornerRadius: 24)
             .foregroundStyle(.clear)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -274,52 +263,9 @@ struct Buttons: View {
                     .background(.tint.tertiary)
             }
     }
-
-    @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Disabled", systemImage: "nosign", isOn: $isDisabled)
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = Buttons.getRandomColor()
-            }
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
-        }
-        ToolbarSpacer(.flexible, placement: .bottomBar)
-        ToolbarItem(placement: .bottomBar) {
-            Picker("Button Style", selection: $pageButtonStyle) {
-                ForEach(ButtonStyleOption.allCases) { style in
-                    Text(style.label).tag(style)
-                }
-            }
-            .pickerStyle(.menu)
-            .fixedSize()
-        }
-    }
-
-    func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .textCase(.uppercase)
-                .font(.caption)
-                .bold()
-                .foregroundStyle(.secondary)
-            content()
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(24)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
-    }
 }
 
-#Preview {
-    Buttons()
-}
-
-// MARK: - Button Style Picker
+// MARK: - Options
 enum ButtonStyleOption: String, CaseIterable, Identifiable {
     case automatic
     case plain
@@ -361,4 +307,8 @@ extension View {
         case .glassProminent: buttonStyle(.glassProminent)
         }
     }
+}
+
+#Preview {
+    ButtonsDemo()
 }

@@ -2,12 +2,10 @@
 //  04 Pickers.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 21/06/26.
-//
 
 import SwiftUI
 
-struct Pickers: View {
+struct PickersDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Pickers & DatePicker",
@@ -15,117 +13,69 @@ struct Pickers: View {
         systemImage: "checklist"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
+    // MARK: - State
     @State private var segment: Int = 0
     @State private var menuSelection: Int = 0
     @State private var wheelSelection: Int = 0
     @State private var inlineSelection: Int = 0
     @State private var date: Date = .distantPast
-    @State private var tint: Color = Pickers.getRandomColor()
 
-    let options = ["All", "Unread", "Flagged", "Drafts"]
-
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
+    private let options = ["All", "Unread", "Flagged", "Drafts"]
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    infoCard
+        DemoPage("Pickers", info: infoCard) { _ in
+            DemoSection("Segmented") {
+                DemoPickerView(selectedSegment: $segment)
+                    .pickerStyle(.segmented)
+                caption("`.segmented` lays every option out at once — best for two to five short labels.")
+            }
 
-                    section("Segmented") {
-                        DemoPickerView(selectedSegment: $segment)
-                            .pickerStyle(.segmented)
-                    }
-
-                    section("Menu") {
-                        Picker("Filter", selection: $menuSelection) {
-                            ForEach(options.indices, id: \.self) { index in
-                                Text(options[index]).tag(index)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                    }
-
-                    section("Wheel") {
-                        Picker("Filter", selection: $wheelSelection) {
-                            ForEach(options.indices, id: \.self) { index in
-                                Text(options[index]).tag(index)
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                    }
-
-                    section("Inline") {
-                        Picker("Filter", selection: $inlineSelection) {
-                            ForEach(options.indices, id: \.self) { index in
-                                Text(options[index]).tag(index)
-                            }
-                        }
-                        .pickerStyle(.inline)
-                    }
-
-                    section("DatePicker — Compact") {
-                        DatePicker("Date", selection: $date, displayedComponents: .date)
-                            .datePickerStyle(.compact)
-                    }
-
-                    section("DatePicker — Graphical") {
-                        DatePicker("Date", selection: $date, displayedComponents: .date)
-                            .datePickerStyle(.graphical)
+            DemoSection("Menu") {
+                Picker("Filter", selection: $menuSelection) {
+                    ForEach(options.indices, id: \.self) { index in
+                        Text(options[index]).tag(index)
                     }
                 }
-                .padding(.vertical)
+                .pickerStyle(.menu)
+                caption("`.menu` shows only the current choice and reveals the rest on tap, so it stays compact.")
             }
-            .contentMargins(16)
-            .navigationTitle("Pickers")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                toolbar
-            }
-            .animation(.easeInOut, value: tint)
-            .background(.tint.secondary)
-        }
-        .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
-    }
 
-    // MARK: - View Components
-    @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = Pickers.getRandomColor()
+            DemoSection("Wheel") {
+                Picker("Filter", selection: $wheelSelection) {
+                    ForEach(options.indices, id: \.self) { index in
+                        Text(options[index]).tag(index)
+                    }
+                }
+                .pickerStyle(.wheel)
+                caption("`.wheel` is a scrolling drum — it hides the picker's own label, so give it surrounding context.")
+            }
+
+            DemoSection("Inline") {
+                Picker("Filter", selection: $inlineSelection) {
+                    ForEach(options.indices, id: \.self) { index in
+                        Text(options[index]).tag(index)
+                    }
+                }
+                .pickerStyle(.inline)
+                caption("`.inline` lists every option in place with a checkmark on the selection.")
+            }
+
+            DemoSection("DatePicker — Compact") {
+                DatePicker("Date", selection: $date, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                caption("`displayedComponents:` chooses date, time or both; `.compact` opens a popover on tap.")
+            }
+
+            DemoSection("DatePicker — Graphical") {
+                DatePicker("Date", selection: $date, displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+                caption("`.graphical` renders the full calendar inline — both pickers share one `Date` binding.")
             }
         }
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
-        }
-    }
-
-    func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .textCase(.uppercase)
-                .font(.caption)
-                .bold()
-                .foregroundStyle(.secondary)
-            content()
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(24)
-        .background(.background, in: RoundedRectangle(cornerRadius: 24))
     }
 }
 
 #Preview {
-    Pickers()
+    PickersDemo()
 }

@@ -2,54 +2,38 @@
 //  01 Materials.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 20/06/26.
-//
 
 import SwiftUI
 
-struct Materials: View {
+struct MaterialsDemo: View {
     // MARK: - Variant
     enum Variant {
         case photoBackground
         case gradientBackground
         case solidBackground
     }
-    
+
     let variant: Variant
-    
+
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Material as background",
-        description: "Observe how the cards interacts with the window background",
+        description: "Observe how the cards interact with the window background",
         systemImage: "lightspectrum.horizontal"
     )
-    
-    // MARK: - Properties & Methods
-    @State var selectedColor: Color = Materials.getRandomColor()
-    @State private var darkModeOn: Bool = false
 
-    var cardShape: some Shape = RoundedRectangle(cornerRadius: 24)
+    // MARK: - State
+    @State private var selectedColor: Color = .demoRandom
+    @State private var isDarkMode = false
 
-    var tint: Color = .green.mix(with: .mint, by: 0.5)
-    
-    let customGradient: LinearGradient = LinearGradient(
-        colors: [
-            .blue,
-            .mint,
-            .orange
-        ],
+    private let cardShape = RoundedRectangle(cornerRadius: DemoMetrics.cardCorner)
+    private let tint: Color = .green.mix(with: .mint, by: 0.5)
+    private let customGradient = LinearGradient(
+        colors: [.blue, .mint, .orange],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
-    
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
-    
+
     // MARK: - Body
     var body: some View {
         NavigationStack {
@@ -67,17 +51,14 @@ struct Materials: View {
                 }
                 .padding(.bottom)
             }
-            .contentMargins(.horizontal, 16)
+            .contentMargins(.horizontal, DemoMetrics.pageMargin)
             .background { background }
             .navigationTitle("Materials")
             .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbarBackgroundVisibility(
-                .visible, for: .navigationBar)
+            .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .toolbarBackground(.bar, for: .navigationBar)
             .scrollEdgeEffectStyle(.hard, for: .top)
-            .toolbar {
-                toolbar
-            }
+            .toolbar { toolbar }
             .safeAreaBar(edge: .bottom) {
                 infoCard
                     .padding(.horizontal)
@@ -85,7 +66,7 @@ struct Materials: View {
             .animation(.easeInOut, value: selectedColor)
         }
         .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 
     // MARK: - View Components
@@ -138,7 +119,7 @@ struct Materials: View {
     }
 
     @ViewBuilder
-    var background: some View {
+    private var background: some View {
         switch variant {
         case .photoBackground:
             Image(.bali)
@@ -154,7 +135,7 @@ struct Materials: View {
         }
     }
     
-    func sectionHeader(title: String) -> some View {
+    private func sectionHeader(title: String) -> some View {
         Text(title)
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -170,20 +151,20 @@ struct Materials: View {
     }
     
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
+            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $isDarkMode)
         }
         if variant == .solidBackground {
             ToolbarItem(placement: .primaryAction) {
                 Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                    self.selectedColor = Materials.getRandomColor()
+                    selectedColor = .demoRandom
                 }
             }
         }
     }
 
-    func badge(_ label: String) -> some View {
+    private func badge(_ label: String) -> some View {
         VStack {
             Text(label)
                 .textCase(.uppercase)
@@ -198,7 +179,7 @@ struct Materials: View {
         .padding()
     }
 
-    func card(material: String) -> some View {
+    private func card(material: String) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 Text("Today's Flight")
@@ -244,13 +225,13 @@ struct Materials: View {
 }
 
 #Preview("Photo Background") {
-    Materials(variant: .photoBackground)
+    MaterialsDemo(variant: .photoBackground)
 }
 
 #Preview("Gradient Background") {
-    Materials(variant: .gradientBackground)
+    MaterialsDemo(variant: .gradientBackground)
 }
 
 #Preview("Solid Background") {
-    Materials(variant: .solidBackground)
+    MaterialsDemo(variant: .solidBackground)
 }

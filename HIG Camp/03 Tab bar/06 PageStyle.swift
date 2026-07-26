@@ -1,6 +1,11 @@
+//
+//  06 PageStyle.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TabViewStylesDemoView: View {
+struct PageStyleDemo: View {
     // MARK: - Variant
     enum Variant {
         case page
@@ -9,51 +14,37 @@ struct TabViewStylesDemoView: View {
 
     let variant: Variant
 
+    // MARK: - Info Card
+    let infoCard = DemoInfoCard(
+        title: "Tab View Styles",
+        description: "`.page` turns a TabView into a swipeable carousel with an index dot control instead of a tab bar — swipe left and right. `.sidebarAdaptable` is the other alternative style: a tab bar on iPhone that becomes a sidebar on iPad and Mac.",
+        systemImage: "square.stack"
+    )
+
+    // MARK: - State
+    private let tint: Color = .orange
+    private let pageCardShape = RoundedRectangle(cornerRadius: 48, style: .continuous)
+
     // MARK: - Body
     var body: some View {
-        switch variant {
-        case .page:
-            pageTabView
-                .tabViewStyle(.page)
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
-        case .pageWithIcons:
-            pageTabViewWithIcons
-                .tabViewStyle(.page)
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
-        }
+        pages
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .tint(tint)
+            .safeAreaBar(edge: .top) {
+                infoCard
+                    .padding(.horizontal)
+            }
     }
 
     // MARK: - View Components
-    private var navigationTabView: some View {
-        TabView {
-            Tab("Inbox", systemImage: "tray") {
-                NavigationStack {
-                    DemoScrollView(count: 20)
-                        .navigationTitle("Inbox")
-                        .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-                }
-            }
-            Tab("Drafts", systemImage: "doc") {
-                NavigationStack {
-                    DemoScrollView(count: 10)
-                        .navigationTitle("Drafts")
-                        .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-                }
-            }
-            Tab("Sent", systemImage: "paperplane") {
-                NavigationStack {
-                    DemoScrollView(count: 15)
-                        .navigationTitle("Sent")
-                        .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-                }
-            }
-            Tab("Settings", systemImage: "gearshape") {
-                NavigationStack {
-                    DemoScrollView(count: 8)
-                        .navigationTitle("Settings")
-                        .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-                }
-            }
+    @ViewBuilder
+    private var pages: some View {
+        switch variant {
+        case .page:
+            pageTabView
+        case .pageWithIcons:
+            pageTabViewWithIcons
         }
     }
 
@@ -64,9 +55,8 @@ struct TabViewStylesDemoView: View {
             pageContent("Third")
             pageContent("Fourth")
         }
-        .tint(.orange)
     }
-    
+
     private var pageTabViewWithIcons: some View {
         TabView {
             Tab("First", systemImage: "1.circle") {
@@ -82,7 +72,6 @@ struct TabViewStylesDemoView: View {
                 pageContent("Fourth")
             }
         }
-        .tint(.indigo)
     }
 
     private func pageContent(_ title: String) -> some View {
@@ -99,21 +88,15 @@ struct TabViewStylesDemoView: View {
         }
         .fixedSize()
         .frame(width: 240, height: 240)
-        .background(
-            .regularMaterial,
-            in: RoundedRectangle(cornerRadius: 48, style: .continuous)
-        )
-        .background(
-            .tint,
-            in: RoundedRectangle(cornerRadius: 48, style: .continuous)
-        )
+        .background(.regularMaterial, in: pageCardShape)
+        .background(.tint, in: pageCardShape)
     }
 }
 
 #Preview("Page") {
-    TabViewStylesDemoView(variant: .page)
+    PageStyleDemo(variant: .page)
 }
 
 #Preview("Page w/ Icons") {
-    TabViewStylesDemoView(variant: .pageWithIcons)
+    PageStyleDemo(variant: .pageWithIcons)
 }

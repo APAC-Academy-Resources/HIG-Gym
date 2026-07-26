@@ -2,12 +2,10 @@
 //  03 Popovers.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 22/06/26.
-//
 
 import SwiftUI
 
-struct Popovers: View {
+struct PopoversDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Popovers",
@@ -15,60 +13,36 @@ struct Popovers: View {
         systemImage: "bubble.middle.top"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
+    // MARK: - State
     @State private var showAdaptive: Bool = false
     @State private var showPopover: Bool = false
-    @State private var tint: Color = Popovers.getRandomColor()
-
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    infoCard
-
-                    section("Default (adapts to a sheet)") {
-                        Button("Show Popover") { showAdaptive = true }
-                            .buttonStyle(.borderedProminent)
-                            .popover(isPresented: $showAdaptive) {
-                                popoverContent
-                            }
+        DemoPage("Popovers", info: infoCard) { _ in
+            DemoSection("Default (adapts to a sheet)") {
+                Button("Show Popover") { showAdaptive = true }
+                    .buttonStyle(.borderedProminent)
+                    .popover(isPresented: $showAdaptive) {
+                        popoverContent
                     }
+                caption("`.popover(isPresented:)` falls back to a sheet at compact widths.")
+            }
 
-                    section("Forced popover") {
-                        Button("Show Popover") { showPopover = true }
-                            .buttonStyle(.borderedProminent)
-                            .popover(isPresented: $showPopover) {
-                                popoverContent
-                                    .presentationCompactAdaptation(.popover)
-                            }
+            DemoSection("Forced popover") {
+                Button("Show Popover") { showPopover = true }
+                    .buttonStyle(.borderedProminent)
+                    .popover(isPresented: $showPopover) {
+                        popoverContent
+                            .presentationCompactAdaptation(.popover)
                     }
-                }
-                .padding(.vertical)
+                caption("`.presentationCompactAdaptation(.popover)` keeps the anchored popover on iPhone.")
             }
-            .contentMargins(16)
-            .navigationTitle("Popovers")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                toolbar
-            }
-            .animation(.easeInOut, value: tint)
         }
-        .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
     }
 
     // MARK: - View Components
-    var popoverContent: some View {
+    private var popoverContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Profile", systemImage: "person")
             Label("Settings", systemImage: "gearshape")
@@ -77,34 +51,8 @@ struct Popovers: View {
         .font(.title3)
         .padding(24)
     }
-
-    @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = Popovers.getRandomColor()
-            }
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
-        }
-    }
-
-    func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .textCase(.uppercase)
-                .font(.caption)
-                .bold()
-                .foregroundStyle(.secondary)
-            content()
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(24)
-        .background(.windowBackground, in: RoundedRectangle(cornerRadius: 24))
-    }
 }
 
 #Preview {
-    Popovers()
+    PopoversDemo()
 }

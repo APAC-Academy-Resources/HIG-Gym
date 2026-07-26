@@ -2,12 +2,10 @@
 //  01 List Styles.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 22/06/26.
-//
 
 import SwiftUI
 
-struct ListStyles: View {
+struct ListStylesDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "List styles",
@@ -15,20 +13,12 @@ struct ListStyles: View {
         systemImage: "list.bullet"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
+    // MARK: - State
     @State private var style: ListStyleOption = .insetGrouped
-    @State private var tint: Color = ListStyles.getRandomColor()
+    @State private var tint: Color = .demoRandom
+    @State private var isDarkMode = false
 
-    let recents = ["Inbox", "Drafts", "Sent", "Archive"]
-
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
+    private let recents = ["Inbox", "Drafts", "Sent", "Archive"]
 
     // MARK: - Body
     var body: some View {
@@ -53,10 +43,14 @@ struct ListStyles: View {
                     Text("Headers and footers describe the rows in their section.")
                 }
 
-                Section("Recents") {
+                Section {
                     ForEach(recents, id: \.self) { name in
                         Label(name, systemImage: "clock")
                     }
+                } header: {
+                    Text("Recents")
+                } footer: {
+                    caption("`.listStyle(_:)` picks the grouping, insets and separators for the whole `List`.")
                 }
             }
             .listStyleOption(style)
@@ -68,19 +62,19 @@ struct ListStyles: View {
             .animation(.easeInOut, value: tint)
         }
         .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 
     // MARK: - View Components
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = ListStyles.getRandomColor()
+            Button("Randomize Tint", systemImage: "arrow.trianglehead.2.clockwise") {
+                tint = .demoRandom
             }
         }
         ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
+            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $isDarkMode)
         }
         ToolbarSpacer(.flexible, placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
@@ -96,10 +90,10 @@ struct ListStyles: View {
 }
 
 #Preview {
-    ListStyles()
+    ListStylesDemo()
 }
 
-// MARK: - List Style Picker
+// MARK: - Options
 enum ListStyleOption: String, CaseIterable, Identifiable {
     case plain
     case grouped

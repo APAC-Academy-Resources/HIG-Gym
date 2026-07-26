@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9BBEE1102FF353D200789FA3 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBEE10F2FF353D200789FA3 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9BBEE10F2FF353D200789FA3 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		9BBFB50B2FD1180A00058675 /* HIG Camp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HIG Camp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -37,7 +35,6 @@
 		9BBFB5022FD1180A00058675 = {
 			isa = PBXGroup;
 			children = (
-				9BBEE10F2FF353D200789FA3 /* SwiftUIView.swift */,
 				9BBFB50D2FD1180A00058675 /* HIG Camp */,
 				9BBFB50C2FD1180A00058675 /* Products */,
 			);
@@ -125,7 +122,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BBEE1102FF353D200789FA3 /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

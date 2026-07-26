@@ -1,8 +1,11 @@
+//
+//  07 Minimize Behavior.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TabBarMinimizeDemoView: View {
-    let behavior: TabBarMinimizeBehavior
-
+struct MinimizeBehaviorDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Tab Bar Minimize Behavior",
@@ -10,7 +13,15 @@ struct TabBarMinimizeDemoView: View {
         systemImage: "arrow.down.right.and.arrow.up.left"
     )
 
+    // MARK: - State
+    /// The axis this demo varies. A system type rather than a nested `Variant`,
+    /// since `TabBarMinimizeBehavior` already enumerates exactly the cases taught.
+    let behavior: TabBarMinimizeBehavior
+
     // MARK: - Body
+    //
+    // No single `.tint` on the type: each tab deliberately carries its own colour
+    // so you can tell which tab you scrolled in as the bar collapses.
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house") {
@@ -46,13 +57,13 @@ struct TabBarMinimizeDemoView: View {
 }
 
 #Preview("Never") {
-    TabBarMinimizeDemoView(behavior: .never)
+    MinimizeBehaviorDemo(behavior: .never)
 }
 
 #Preview("On Scroll Down") {
-    TabBarMinimizeDemoView(behavior: .onScrollDown)
+    MinimizeBehaviorDemo(behavior: .onScrollDown)
 }
 
 #Preview("On Scroll Up") {
-    TabBarMinimizeDemoView(behavior: .onScrollUp)
+    MinimizeBehaviorDemo(behavior: .onScrollUp)
 }

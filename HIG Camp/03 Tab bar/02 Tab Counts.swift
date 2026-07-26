@@ -1,6 +1,11 @@
+//
+//  02 Tab Counts.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TabCountsDemoView: View {
+struct TabCountsDemo: View {
     // MARK: - Variant
     enum Variant {
         case two
@@ -19,8 +24,18 @@ struct TabCountsDemoView: View {
         systemImage: "square.grid.3x1.below.line.grid.1x2"
     )
 
+    // MARK: - State
+    private let tint: Color = .gray
+
     // MARK: - Body
     var body: some View {
+        tabView
+            .tint(tint)
+    }
+
+    // MARK: - View Components
+    @ViewBuilder
+    private var tabView: some View {
         switch variant {
         case .two:
             twoTabs
@@ -35,40 +50,40 @@ struct TabCountsDemoView: View {
         }
     }
 
-    // MARK: - View Components
-
     private var twoTabs: some View {
         TabView {
-            Tab("Home", systemImage: "house") { homeContent }
-            Tab("Settings", systemImage: "gearshape") { settingsContent }
+            Tab("Home", systemImage: "house") { tabContent(title: "Home", count: 20) }
+            Tab("Settings", systemImage: "gearshape") { tabContent(title: "Settings", count: 8) }
         }
     }
 
     private var fourTabs: some View {
         TabView {
-            Tab("Home", systemImage: "house") { homeContent }
-            Tab("Browse", systemImage: "square.grid.2x2") { browseContent }
-            Tab("Favorites", systemImage: "star") { favoritesContent }
-            Tab("Settings", systemImage: "gearshape") { settingsContent }
+            Tab("Home", systemImage: "house") { tabContent(title: "Home", count: 20) }
+            Tab("Browse", systemImage: "square.grid.2x2") { tabContent(title: "Browse", count: 25) }
+            Tab("Favorites", systemImage: "star") { tabContent(title: "Favorites", count: 12) }
+            Tab("Settings", systemImage: "gearshape") { tabContent(title: "Settings", count: 8) }
         }
     }
 
     private var sixTabs: some View {
         TabView {
-            Tab("Home", systemImage: "house") { homeContent }
-            Tab("Browse", systemImage: "square.grid.2x2") { browseContent }
-            Tab("Favorites", systemImage: "star") { favoritesContent }
-            Tab("Inbox", systemImage: "tray") { inboxContent }
-            Tab("Profile", systemImage: "person") { profileContent }
-            Tab("Settings", systemImage: "gearshape") { settingsContent }
+            Tab("Home", systemImage: "house") { tabContent(title: "Home", count: 20) }
+            Tab("Browse", systemImage: "square.grid.2x2") { tabContent(title: "Browse", count: 25) }
+            Tab("Favorites", systemImage: "star") { tabContent(title: "Favorites", count: 12) }
+            Tab("Inbox", systemImage: "tray") { tabContent(title: "Inbox", count: 18) }
+            Tab("Profile", systemImage: "person") { tabContent(title: "Profile", count: 10) }
+            Tab("Settings", systemImage: "gearshape") { tabContent(title: "Settings", count: 8) }
         }
     }
 
-    private var homeContent: some View {
+    /// Filler for one tab. Chrome, not the taught API — every tab looks the same
+    /// so the only thing that changes between variants is the number of tabs.
+    private func tabContent(title: String, count: Int) -> some View {
         NavigationStack {
-            DemoScrollView(count: 20)
+            DemoScrollView(count: count)
                 .background(Color(.tintColor).gradient.opacity(0.7))
-                .navigationTitle("Home")
+                .navigationTitle(title)
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
                 .safeAreaBar(edge: .bottom) {
                     infoCard
@@ -76,77 +91,24 @@ struct TabCountsDemoView: View {
                 }
         }
     }
-
-    private var browseContent: some View {
-        NavigationStack {
-            DemoScrollView(count: 25)
-                .navigationTitle("Browse")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var favoritesContent: some View {
-        NavigationStack {
-            DemoScrollView(count: 12)
-                .background(Color(.tintColor).gradient.opacity(0.7))
-                .toolbarTitleDisplayMode(.inline)
-                .navigationTitle("Favorites")
-                .toolbarTitleMenu {
-                    Text("test")
-                }
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var inboxContent: some View {
-        NavigationStack {
-            DemoScrollView(count: 18)
-                .background(Color(.tintColor).gradient.opacity(0.7))
-                .navigationTitle("Inbox")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var profileContent: some View {
-        NavigationStack {
-            DemoScrollView(count: 10)
-                .background(Color(.tintColor).gradient.opacity(0.7))
-                .navigationTitle("Profile")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
-
-    private var settingsContent: some View {
-        NavigationStack {
-            DemoScrollView(count: 8)
-                .background(Color(.tintColor).gradient.opacity(0.7))
-                .navigationTitle("Settings")
-                .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
-        }
-    }
 }
 
 #Preview("Two Tabs") {
-    TabCountsDemoView(variant: .two)
-        .tint(.gray)
+    TabCountsDemo(variant: .two)
 }
 
 #Preview("Two Tabs + Minimize Behavior") {
-    TabCountsDemoView(variant: .twoMinimize)
-        .tint(.gray)
+    TabCountsDemo(variant: .twoMinimize)
 }
 
 #Preview("Four Tabs") {
-    TabCountsDemoView(variant: .four)
-        .tint(.gray)
+    TabCountsDemo(variant: .four)
 }
 
 #Preview("Six Tabs") {
-    TabCountsDemoView(variant: .six)
-        .tint(.gray)
+    TabCountsDemo(variant: .six)
 }
 
 #Preview("Six Tabs + Minimize Behavior") {
-    TabCountsDemoView(variant: .sixMinimize)
-        .tint(.gray)
+    TabCountsDemo(variant: .sixMinimize)
 }

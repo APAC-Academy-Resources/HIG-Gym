@@ -1,3 +1,8 @@
+//
+//  05 BottomAccessory.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
 /// Demonstrates `tabViewBottomAccessory` — a persistent control the system places
@@ -6,7 +11,7 @@ import SwiftUI
 /// When the tab bar is full size the accessory renders *above* it (`.expanded`);
 /// when the tab bar minimizes on scroll it moves *inline* into the tab bar (`.inline`).
 /// Read `\.tabViewBottomAccessoryPlacement` inside the accessory to adapt the layout.
-struct TabViewBottomAccessoryDemoView: View {
+struct BottomAccessoryDemo: View {
     // MARK: - Variant
     enum Variant {
         case basic
@@ -23,11 +28,18 @@ struct TabViewBottomAccessoryDemoView: View {
         systemImage: "play.square.stack"
     )
 
-    // MARK: - Properties & Methods
-    @State private var isEnabled = true
+    // MARK: - State
+    private let tint: Color = .purple
 
     // MARK: - Body
     var body: some View {
+        accessoryTabView
+            .tint(tint)
+    }
+
+    // MARK: - View Components
+    @ViewBuilder
+    private var accessoryTabView: some View {
         switch variant {
         case .basic:
             tabs
@@ -43,7 +55,6 @@ struct TabViewBottomAccessoryDemoView: View {
         }
     }
 
-    // MARK: - View Components
     private var tabs: some View {
         TabView {
             Tab("Play", systemImage: "guitars") {
@@ -122,16 +133,13 @@ private struct AdaptiveNowPlayingAccessory: View {
 }
 
 #Preview("Basic") {
-    TabViewBottomAccessoryDemoView(variant: .basic)
-        .tint(.purple)
+    BottomAccessoryDemo(variant: .basic)
 }
 
 #Preview("Adaptive (scroll down to collapse)") {
-    TabViewBottomAccessoryDemoView(variant: .adaptive)
-        .tint(.purple)
+    BottomAccessoryDemo(variant: .adaptive)
 }
 
 #Preview("Adaptive with search") {
-    TabViewBottomAccessoryDemoView(variant: .adaptiveWithSearch)
-        .tint(.purple)
+    BottomAccessoryDemo(variant: .adaptiveWithSearch)
 }

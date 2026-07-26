@@ -1,6 +1,11 @@
+//
+//  04 TabBarSearch.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TabSearchDemoView: View {
+struct TabBarSearchDemo: View {
     // MARK: - Variant
     enum Variant {
         case searchRole
@@ -18,8 +23,18 @@ struct TabSearchDemoView: View {
         systemImage: "magnifyingglass"
     )
 
+    // MARK: - State
+    private let tint: Color = .blue
+
     // MARK: - Body
     var body: some View {
+        styledTabView
+            .tint(tint)
+    }
+
+    // MARK: - View Components
+    @ViewBuilder
+    private var styledTabView: some View {
         switch variant {
         case .searchRole:
             tabView(searchAsRole: true)
@@ -34,7 +49,6 @@ struct TabSearchDemoView: View {
         }
     }
 
-    // MARK: - View Components
     @ViewBuilder
     private func tabView(searchAsRole: Bool) -> some View {
         TabView {
@@ -80,21 +94,17 @@ struct TabSearchDemoView: View {
 }
 
 #Preview("Plain Tab") {
-    TabSearchDemoView(variant: .plainTab)
-        .tint(.blue)
+    TabBarSearchDemo(variant: .plainTab)
 }
 
 #Preview("Search Role") {
-    TabSearchDemoView(variant: .searchRole)
-        .tint(.blue)
+    TabBarSearchDemo(variant: .searchRole)
 }
 
 #Preview("Search Role + Minimize on Scroll") {
-    TabSearchDemoView(variant: .searchRoleMinimize)
-        .tint(.blue)
+    TabBarSearchDemo(variant: .searchRoleMinimize)
 }
 
 #Preview("Sidebar Adaptable (best on iPad)") {
-    TabSearchDemoView(variant: .sidebarAdaptable)
-        .tint(.blue)
+    TabBarSearchDemo(variant: .sidebarAdaptable)
 }

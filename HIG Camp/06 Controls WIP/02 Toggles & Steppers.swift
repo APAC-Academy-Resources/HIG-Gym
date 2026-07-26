@@ -2,12 +2,10 @@
 //  02 Toggles & Steppers.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 21/06/26.
-//
 
 import SwiftUI
 
-struct TogglesAndSteppers: View {
+struct TogglesAndSteppersDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Toggles & Steppers",
@@ -15,100 +13,48 @@ struct TogglesAndSteppers: View {
         systemImage: "switch.2"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
+    // MARK: - State
     @State private var switchOn: Bool = true
     @State private var buttonOn: Bool = false
     @State private var automaticOn: Bool = true
     @State private var quantity: Int = 1
     @State private var temperature: Int = 20
-    @State private var tint: Color = TogglesAndSteppers.getRandomColor()
-
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    infoCard
-
-                    section("Toggle Styles") {
-                        Divider()
-                        Toggle("Switch", isOn: $switchOn)
-                            .toggleStyle(.switch)
-                        Divider()
-                        HStack {
-                            Text("Button")
-                            Spacer()
-                            Toggle("Light", systemImage: "sun.max.fill", isOn: $buttonOn)
-                                .toggleStyle(.button)
-                                .labelStyle(.iconOnly)
-                        }
-                        Divider()
-                        Toggle("Automatic", isOn: $automaticOn)
-                            .toggleStyle(.automatic)
-                    }
-
-                    section("Stepper") {
-                        Stepper("Quantity: \(quantity)", value: $quantity, in: 0...10)
-                        Stepper(
-                            "Temperature: \(temperature)°",
-                            value: $temperature,
-                            in: 16...30,
-                            step: 2
-                        )
-                    }
+        DemoPage("Toggles & Steppers", info: infoCard) { _ in
+            DemoSection("Toggle Styles") {
+                Divider()
+                Toggle("Switch", isOn: $switchOn)
+                    .toggleStyle(.switch)
+                Divider()
+                HStack {
+                    Text("Button")
+                    Spacer()
+                    Toggle("Light", systemImage: "sun.max.fill", isOn: $buttonOn)
+                        .toggleStyle(.button)
+                        .labelStyle(.iconOnly)
                 }
-                .padding(.vertical)
+                Divider()
+                Toggle("Automatic", isOn: $automaticOn)
+                    .toggleStyle(.automatic)
+                caption("`.toggleStyle(_:)` swaps the presentation without changing the `Bool` binding; `.automatic` lets the container decide.")
             }
-            .contentMargins(16)
-            .background(.tint.secondary)
-            .navigationTitle("Toggles & Steppers")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                toolbar
-            }
-            .animation(.easeInOut, value: tint)
-        }
-        .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
-    }
 
-    // MARK: - View Components
-    @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = TogglesAndSteppers.getRandomColor()
+            DemoSection("Stepper") {
+                Stepper("Quantity: \(quantity)", value: $quantity, in: 0...10)
+                Stepper(
+                    "Temperature: \(temperature)°",
+                    value: $temperature,
+                    in: 16...30,
+                    step: 2
+                )
+                caption("`in:` clamps the value and disables the arrow at each end; `step:` sets how much one tap moves it.")
             }
         }
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
-        }
-    }
-
-    func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .textCase(.uppercase)
-                .font(.caption)
-                .bold()
-                .foregroundStyle(.secondary)
-            content()
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(24)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 24))
     }
 }
 
 #Preview {
-    TogglesAndSteppers()
+    TogglesAndSteppersDemo()
 }

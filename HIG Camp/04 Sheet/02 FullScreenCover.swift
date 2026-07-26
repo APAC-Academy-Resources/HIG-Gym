@@ -1,6 +1,11 @@
+//
+//  02 FullScreenCover.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct FullScreenCoverDemoView: View {
+struct FullScreenCoverDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Full Screen Cover",
@@ -8,8 +13,10 @@ struct FullScreenCoverDemoView: View {
         systemImage: "rectangle.inset.filled"
     )
 
-    // MARK: - Properties & Methods
+    // MARK: - State
     @State private var isOpen = false
+
+    private let tint: Color = .brown
 
     // MARK: - Body
     var body: some View {
@@ -34,10 +41,10 @@ struct FullScreenCoverDemoView: View {
                         .padding(.horizontal)
                 }
         }
+        .tint(tint)
     }
 }
 
-#Preview {
-    FullScreenCoverDemoView()
-        .tint(.brown)
+#Preview("Full Screen Cover") {
+    FullScreenCoverDemo()
 }

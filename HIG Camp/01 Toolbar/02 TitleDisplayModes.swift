@@ -1,8 +1,15 @@
+//
+//  02 TitleDisplayModes.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct ToolbarTitleDisplayModesDemoView: View {
+struct TitleDisplayModesDemo: View {
     // MARK: - Variant
-    enum Variant {
+    /// Which toolbar items accompany the title. Secondary to `mode` — the
+    /// display mode is what this demo is really about.
+    enum ToolbarItems {
         case leadingAndTrailing
         case itemGroup
         case fiveItems
@@ -11,7 +18,7 @@ struct ToolbarTitleDisplayModesDemoView: View {
 
     let mode: ToolbarTitleDisplayMode
     var titleMenu: Bool = false
-    var toolbarItems: Variant = .leadingAndTrailing
+    var toolbarItems: ToolbarItems = .leadingAndTrailing
 
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
@@ -19,6 +26,9 @@ struct ToolbarTitleDisplayModesDemoView: View {
         description: "Scroll down the list to observe how each title display mode adapts",
         systemImage: "character"
     )
+
+    // MARK: - State
+    private let tint: Color = .orange
 
     // MARK: - Body
     var body: some View {
@@ -39,6 +49,7 @@ struct ToolbarTitleDisplayModesDemoView: View {
                     .padding(.horizontal)
             }
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
@@ -98,41 +109,37 @@ struct ToolbarTitleDisplayModesDemoView: View {
 }
 
 #Preview("Large Title") {
-    ToolbarTitleDisplayModesDemoView(mode: .large)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .large)
 }
 
 #Preview("Inline Large Title") {
-    ToolbarTitleDisplayModesDemoView(mode: .inlineLarge)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .inlineLarge)
 }
 
 #Preview("Inline Title") {
-    ToolbarTitleDisplayModesDemoView(mode: .inline)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .inline)
 }
 
 #Preview("Inline Title w/ Title Menu") {
-    ToolbarTitleDisplayModesDemoView(mode: .inline, titleMenu: true)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .inline, titleMenu: true)
 }
 
 #Preview("Automatic") {
-    ToolbarTitleDisplayModesDemoView(mode: .automatic)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .automatic)
 }
 
 #Preview("Leading + Trailing") {
-    ToolbarTitleDisplayModesDemoView(mode: .inline, toolbarItems: .leadingAndTrailing)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .inline, toolbarItems: .leadingAndTrailing)
+}
+
+#Preview("Item Group") {
+    TitleDisplayModesDemo(mode: .inline, toolbarItems: .itemGroup)
 }
 
 #Preview("Five Items") {
-    ToolbarTitleDisplayModesDemoView(mode: .inline, toolbarItems: .fiveItems)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .inline, toolbarItems: .fiveItems)
 }
 
 #Preview("Custom Title") {
-    ToolbarTitleDisplayModesDemoView(mode: .large, toolbarItems: .customTitle)
-        .tint(.orange)
+    TitleDisplayModesDemo(mode: .large, toolbarItems: .customTitle)
 }

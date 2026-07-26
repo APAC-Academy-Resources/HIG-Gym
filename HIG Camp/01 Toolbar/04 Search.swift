@@ -1,18 +1,25 @@
+//
+//  04 Search.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct ToolbarSearchDemoView: View {
-    // MARK: - Properties & Methods
-    let placement: SearchFieldPlacement
-    var bottomItems: Bool = false
-    /// Contacts-style: dock the search field in the bottom bar with a leading "+".
-    var bottomSearch: Bool = false
-
+struct ToolbarSearchDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Search bar placements",
         description: "The system can determine different search bar placements",
         systemImage: "magnifyingglass"
     )
+
+    // MARK: - State
+    let placement: SearchFieldPlacement
+    var bottomItems: Bool = false
+    /// Contacts-style: dock the search field in the bottom bar with a leading "+".
+    var bottomSearch: Bool = false
+
+    private let tint: Color = .green
 
     // MARK: - Body
     var body: some View {
@@ -26,11 +33,12 @@ struct ToolbarSearchDemoView: View {
                     infoCard.padding(.horizontal)
                 }
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Button("Filter", systemImage: "line.3.horizontal.decrease") { }
         }
@@ -63,31 +71,25 @@ struct ToolbarSearchDemoView: View {
 }
 
 #Preview("Toolbar") {
-    ToolbarSearchDemoView(placement: .toolbar)
-        .tint(.green)
+    ToolbarSearchDemo(placement: .toolbar)
 }
 
 #Preview("Toolbar + bottom items") {
-    ToolbarSearchDemoView(placement: .toolbar, bottomItems: true)
-        .tint(.green)
+    ToolbarSearchDemo(placement: .toolbar, bottomItems: true)
 }
 
 #Preview("Bottom search + custom items") {
-    ToolbarSearchDemoView(placement: .toolbar, bottomSearch: true)
-        .tint(.green)
+    ToolbarSearchDemo(placement: .toolbar, bottomSearch: true)
 }
 
 #Preview("Drawer") {
-    ToolbarSearchDemoView(placement: .navigationBarDrawer)
-        .tint(.green)
+    ToolbarSearchDemo(placement: .navigationBarDrawer)
 }
 
 #Preview("Drawer Always") {
-    ToolbarSearchDemoView(placement: .navigationBarDrawer(displayMode: .always))
-        .tint(.green)
+    ToolbarSearchDemo(placement: .navigationBarDrawer(displayMode: .always))
 }
 
 #Preview("Toolbar Principal") {
-    ToolbarSearchDemoView(placement: .toolbarPrincipal)
-        .tint(.green)
+    ToolbarSearchDemo(placement: .toolbarPrincipal)
 }

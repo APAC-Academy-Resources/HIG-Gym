@@ -2,11 +2,11 @@
 //  DemoMixedTopToolbar.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 20/06/26.
-//
 
 import SwiftUI
 
+/// A profile avatar leading, three actions trailing with a `ToolbarSpacer`
+/// splitting them into two clusters.
 struct DemoMixedTopToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -24,7 +24,8 @@ struct DemoMixedTopToolbar: ToolbarContent {
         }
     }
 
-    // ponytail: duplicated from ToolbarItemsDemoView; extract a shared
+    // ponytail: near-duplicate of ToolbarItemsDemo.profileImage(size:) — that
+    // one is a bare Image, this one wraps it in a Button. Extract a shared
     // ProfileImageButton view only if a 3rd caller appears.
     private func profileImageButton(size: CGFloat = 32) -> some View {
         Button { } label: {

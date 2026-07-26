@@ -1,6 +1,11 @@
+//
+//  03 ScrollEdgeEffects.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct ScrollEdgeEffectDemoView: View {
+struct ScrollEdgeEffectsDemo: View {
     // MARK: - Variant
     enum Variant {
         case soft
@@ -19,10 +24,21 @@ struct ScrollEdgeEffectDemoView: View {
         systemImage: "circle.lefthalf.striped.horizontal"
     )
 
+    // MARK: - State
+    private let tint: Color = .purple
+
+    private var style: ScrollEdgeEffectStyle {
+        switch variant {
+        case .soft: .soft
+        case .hard, .hardWithMaterial: .hard
+        default: .automatic
+        }
+    }
+
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            if (variant == .hardWithMaterial) {
+            if variant == .hardWithMaterial {
                 content
                     .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
                     .toolbarBackgroundVisibility(.visible, for: .navigationBar)
@@ -30,19 +46,11 @@ struct ScrollEdgeEffectDemoView: View {
                 content
             }
         }
-    }
-
-    // MARK: - Properties & Methods
-    var style: ScrollEdgeEffectStyle {
-        switch variant {
-            case .soft: .soft
-            case .hard, .hardWithMaterial: .hard
-            default: .automatic
-        }
+        .tint(tint)
     }
 
     // MARK: - View Components
-    var content: some View {
+    private var content: some View {
         DemoScrollView(count: 40)
             .scrollEdgeEffectStyle(style, for: .top)
             .scrollEdgeEffectHidden(variant == .hidden)
@@ -61,27 +69,21 @@ struct ScrollEdgeEffectDemoView: View {
 }
 
 #Preview("Soft") {
-    ScrollEdgeEffectDemoView(variant: .soft)
-        .tint(.red)
+    ScrollEdgeEffectsDemo(variant: .soft)
 }
 
 #Preview("Hard") {
-    ScrollEdgeEffectDemoView(variant: .hard)
-        .tint(.purple)
+    ScrollEdgeEffectsDemo(variant: .hard)
 }
 
 #Preview("Hard with Thick Material Background") {
-    ScrollEdgeEffectDemoView(variant: .hardWithMaterial)
-        .tint(.purple)
+    ScrollEdgeEffectsDemo(variant: .hardWithMaterial)
 }
 
-
 #Preview("Automatic") {
-    ScrollEdgeEffectDemoView(variant: .automatic)
-        .tint(.brown)
+    ScrollEdgeEffectsDemo(variant: .automatic)
 }
 
 #Preview("Hidden") {
-    ScrollEdgeEffectDemoView(variant: .hidden)
-        .tint(.brown)
+    ScrollEdgeEffectsDemo(variant: .hidden)
 }

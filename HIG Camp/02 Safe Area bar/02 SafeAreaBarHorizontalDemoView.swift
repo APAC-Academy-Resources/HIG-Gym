@@ -1,3 +1,8 @@
+//
+//  02 SafeAreaBarHorizontalDemoView.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
 /// Demonstrates `safeAreaBar(edge:)` on the **horizontal** edges (`.leading` / `.trailing`).
@@ -7,13 +12,15 @@ import SwiftUI
 /// or in creative/editor apps. Unlike `safeAreaInset`, it also extends the scroll edge
 /// effect behind the bar (Liquid Glass). The `alignment:` here is a `VerticalAlignment`
 /// (`.top` / `.center` / `.bottom`); chain multiple calls to inset more than one edge.
-struct HorizontalSafeAreaBarDemoView: View {
+struct SafeAreaBarHorizontalDemo: View {
     // MARK: - Variant
     enum Variant {
         case trailing
         case leading
         case both
     }
+
+    let variant: Variant
 
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
@@ -22,8 +29,8 @@ struct HorizontalSafeAreaBarDemoView: View {
         systemImage: "sidebar.right"
     )
 
-    // MARK: - Properties & Methods
-    let variant: Variant
+    // MARK: - State
+    private let tint: Color = .indigo
 
     // MARK: - Body
     var body: some View {
@@ -58,6 +65,7 @@ struct HorizontalSafeAreaBarDemoView: View {
                     }
             }
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
@@ -113,16 +121,13 @@ private struct ToolRail: View {
 }
 
 #Preview("Trailing") {
-    HorizontalSafeAreaBarDemoView(variant: .trailing)
-        .tint(.orange)
+    SafeAreaBarHorizontalDemo(variant: .trailing)
 }
 
 #Preview("Leading") {
-    HorizontalSafeAreaBarDemoView(variant: .leading)
-        .tint(.indigo)
+    SafeAreaBarHorizontalDemo(variant: .leading)
 }
 
 #Preview("Both Edges") {
-    HorizontalSafeAreaBarDemoView(variant: .both)
-        .tint(.pink)
+    SafeAreaBarHorizontalDemo(variant: .both)
 }

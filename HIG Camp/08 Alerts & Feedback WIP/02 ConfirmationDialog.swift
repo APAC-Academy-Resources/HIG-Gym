@@ -2,8 +2,6 @@
 //  02 ConfirmationDialog.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 22/06/26.
-//
 
 import SwiftUI
 
@@ -15,95 +13,44 @@ struct ConfirmationDialogDemo: View {
         systemImage: "square.stack.3d.up"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
+    // MARK: - State
     @State private var showActions: Bool = false
     @State private var showTitled: Bool = false
     @State private var choice: String = "—"
-    @State private var tint: Color = ConfirmationDialogDemo.getRandomColor()
-
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    infoCard
-
-                    section("Actions") {
-                        Button("Show Options") { showActions = true }
-                            .buttonStyle(.borderedProminent)
-                        Text("Last choice: \(choice)")
-                            .foregroundStyle(.tint)
+        DemoPage("Confirmation Dialog", info: infoCard) { _ in
+            DemoSection("Actions") {
+                Button("Show Options") { showActions = true }
+                    .buttonStyle(.borderedProminent)
+                    .confirmationDialog("Choose an action", isPresented: $showActions) {
+                        Button("Camera") { choice = "Camera" }
+                        Button("Photo Library") { choice = "Photo Library" }
+                        Button("Files") { choice = "Files" }
+                        Button("Cancel", role: .cancel) { choice = "Cancel" }
                     }
+                Text("Last choice: \(choice)")
+                    .foregroundStyle(.tint)
+                caption("`.confirmationDialog(_:isPresented:)` slides a short list of actions up from the bottom.")
+            }
 
-                    section("Visible title") {
-                        Button("Delete Photo") { showTitled = true }
-                            .buttonStyle(.borderedProminent)
+            DemoSection("Visible title") {
+                Button("Delete Photo") { showTitled = true }
+                    .buttonStyle(.borderedProminent)
+                    .confirmationDialog(
+                        "Delete this photo?",
+                        isPresented: $showTitled,
+                        titleVisibility: .visible
+                    ) {
+                        Button("Delete", role: .destructive) {}
+                        Button("Cancel", role: .cancel) {}
+                    } message: {
+                        Text("This photo will be removed from all devices.")
                     }
-                }
-                .padding(.vertical)
-            }
-            .contentMargins(16)
-            .navigationTitle("Confirmation Dialog")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                toolbar
-            }
-            .animation(.easeInOut, value: tint)
-            .confirmationDialog("Choose an action", isPresented: $showActions) {
-                Button("Camera") { choice = "Camera" }
-                Button("Photo Library") { choice = "Photo Library" }
-                Button("Files") { choice = "Files" }
-                Button("Cancel", role: .cancel) { choice = "Cancel" }
-            }
-            .confirmationDialog(
-                "Delete this photo?",
-                isPresented: $showTitled,
-                titleVisibility: .visible
-            ) {
-                Button("Delete", role: .destructive) {}
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("This photo will be removed from all devices.")
+                caption("`titleVisibility: .visible` shows the title as a header above the actions.")
             }
         }
-        .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
-    }
-
-    // MARK: - View Components
-    @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = ConfirmationDialogDemo.getRandomColor()
-            }
-        }
-        ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
-        }
-    }
-
-    func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .textCase(.uppercase)
-                .font(.caption)
-                .bold()
-                .foregroundStyle(.secondary)
-            content()
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(24)
-        .background(.windowBackground, in: RoundedRectangle(cornerRadius: 24))
     }
 }
 

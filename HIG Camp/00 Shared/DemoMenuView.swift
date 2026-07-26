@@ -1,6 +1,17 @@
+//
+//  DemoMenuView.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
+/// A menu exercising every kind of item a `Menu` can hold: a `ControlGroup`
+/// row, a submenu, an inline `Picker`, plain buttons and a destructive one.
+///
+/// Shared by the menu, toolbar and context-menu demos.
 struct DemoMenuView: View {
+    @State private var choice = 1
+
     var body: some View {
         Menu {
             ControlGroup {
@@ -40,7 +51,7 @@ struct DemoMenuView: View {
             
             Divider()
             
-            Picker("Choice", selection: .constant(1)) {
+            Picker("Choice", selection: $choice) {
                 Label("Third", systemImage: "3.circle")
                     .tag(3)
 

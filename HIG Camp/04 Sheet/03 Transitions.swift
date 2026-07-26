@@ -1,6 +1,11 @@
+//
+//  03 Transitions.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TransitionsDemoView: View {
+struct TransitionsDemo: View {
     // MARK: - Variant
     enum Variant {
         case standard
@@ -8,7 +13,7 @@ struct TransitionsDemoView: View {
         case zoomCover
     }
 
-    let style: Variant
+    let variant: Variant
 
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
@@ -17,41 +22,27 @@ struct TransitionsDemoView: View {
         systemImage: "arrow.up.left.and.arrow.down.right"
     )
 
-    // MARK: - Properties & Methods
+    // MARK: - State
     @State private var isOpen = false
     @Namespace private var namespace
 
     private let zoomID = "zoom"
+    private let tint: Color = .mint
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            switch style {
+            switch variant {
             case .standard:
                 baseList
-                    .toolbar {
-                        ToolbarSpacer(placement: .bottomBar)
-                        ToolbarItem(placement: .bottomBar) {
-                            Button("List", systemImage: "checklist") {
-                                isOpen = true
-                            }
-                        }
-                    }
+                    .toolbar { toolbar }
                     .sheet(isPresented: $isOpen) {
                         DemoModalView(isOpen: $isOpen)
                     }
 
             case .zoomSheet:
                 baseList
-                    .toolbar {
-                        ToolbarSpacer(placement: .bottomBar)
-                        ToolbarItem(placement: .bottomBar) {
-                            Button("Zoom", systemImage: "arrow.up.left.and.arrow.down.right") {
-                                isOpen = true
-                            }
-                        }
-                        .matchedTransitionSource(id: zoomID, in: namespace)
-                    }
+                    .toolbar { toolbar }
                     .sheet(isPresented: $isOpen) {
                         DemoModalView(isOpen: $isOpen)
                             .navigationTransition(.zoom(sourceID: zoomID, in: namespace))
@@ -59,23 +50,50 @@ struct TransitionsDemoView: View {
 
             case .zoomCover:
                 baseList
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button("Zoom", systemImage: "arrow.up.left.and.arrow.down.right") {
-                                isOpen = true
-                            }
-                        }
-                        .matchedTransitionSource(id: zoomID, in: namespace)
-                    }
+                    .toolbar { toolbar }
                     .fullScreenCover(isPresented: $isOpen) {
                         DemoModalView(isOpen: $isOpen, title: "Fullscreen Cover")
                             .navigationTransition(.zoom(sourceID: zoomID, in: namespace))
                     }
             }
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
+    /// The control that presents. `.matchedTransitionSource` marks it as the
+    /// shape the zoom transition grows out of, so it has to sit on the button —
+    /// only the placement and label differ per variant.
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        switch variant {
+        case .standard:
+            ToolbarSpacer(placement: .bottomBar)
+            ToolbarItem(placement: .bottomBar) {
+                Button("List", systemImage: "checklist") {
+                    isOpen = true
+                }
+            }
+
+        case .zoomSheet:
+            ToolbarSpacer(placement: .bottomBar)
+            ToolbarItem(placement: .bottomBar) {
+                Button("Zoom", systemImage: "arrow.up.left.and.arrow.down.right") {
+                    isOpen = true
+                }
+            }
+            .matchedTransitionSource(id: zoomID, in: namespace)
+
+        case .zoomCover:
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Zoom", systemImage: "arrow.up.left.and.arrow.down.right") {
+                    isOpen = true
+                }
+            }
+            .matchedTransitionSource(id: zoomID, in: namespace)
+        }
+    }
+
     private var baseList: some View {
         DemoScrollView(count: 20)
             .toolbarTitleDisplayMode(.inlineLarge)
@@ -89,16 +107,13 @@ struct TransitionsDemoView: View {
 }
 
 #Preview("Default") {
-    TransitionsDemoView(style: .standard)
-        .tint(.mint)
+    TransitionsDemo(variant: .standard)
 }
 
 #Preview("Zoom (Sheet)") {
-    TransitionsDemoView(style: .zoomSheet)
-        .tint(.orange)
+    TransitionsDemo(variant: .zoomSheet)
 }
 
 #Preview("Zoom (Full Screen Cover)") {
-    TransitionsDemoView(style: .zoomCover)
-        .tint(.green)
+    TransitionsDemo(variant: .zoomCover)
 }

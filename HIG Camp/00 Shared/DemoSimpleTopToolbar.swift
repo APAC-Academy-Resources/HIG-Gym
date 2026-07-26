@@ -2,10 +2,11 @@
 //  DemoSimpleTopToolbar.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 20/06/26.
-//
+
 import SwiftUI
 
+/// Undo/redo on the leading side, a prominent Add on the trailing side —
+/// the most common top-toolbar arrangement.
 struct DemoSimpleTopToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {

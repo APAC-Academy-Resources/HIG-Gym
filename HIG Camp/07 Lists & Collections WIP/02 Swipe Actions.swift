@@ -2,8 +2,6 @@
 //  02 Swipe Actions.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 22/06/26.
-//
 
 import SwiftUI
 
@@ -15,18 +13,12 @@ struct SwipeActionsDemo: View {
         systemImage: "hand.draw"
     )
 
-    // MARK: - Properties & Methods
-    @State private var darkModeOn: Bool = false
-    @State private var messages: [String] = (1...8).map { "Message \($0)" }
-    @State private var tint: Color = SwipeActionsDemo.getRandomColor()
+    // MARK: - State
+    private static let initialMessages = (1...8).map { "Message \($0)" }
 
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
+    @State private var messages: [String] = initialMessages
+    @State private var tint: Color = .demoRandom
+    @State private var isDarkMode = false
 
     // MARK: - Body
     var body: some View {
@@ -38,7 +30,7 @@ struct SwipeActionsDemo: View {
                         .listRowBackground(Color.clear)
                 }
 
-                Section("Swipe a row") {
+                Section {
                     ForEach(messages, id: \.self) { message in
                         Label(message, systemImage: "envelope")
                             .swipeActions(edge: .leading) {
@@ -61,6 +53,10 @@ struct SwipeActionsDemo: View {
                                 .tint(.indigo)
                             }
                     }
+                } header: {
+                    Text("Swipe a row")
+                } footer: {
+                    caption("`.swipeActions(edge:)` adds buttons revealed by dragging a row; `allowsFullSwipe` lets a long drag fire the first one.")
                 }
             }
             .navigationTitle("Swipe Actions")
@@ -71,24 +67,24 @@ struct SwipeActionsDemo: View {
             .animation(.easeInOut, value: tint)
         }
         .tint(tint)
-        .preferredColorScheme(darkModeOn ? .dark : .light)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 
     // MARK: - View Components
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Button("Reset", systemImage: "arrow.counterclockwise") {
-                messages = (1...8).map { "Message \($0)" }
+                messages = Self.initialMessages
             }
         }
         ToolbarItem(placement: .primaryAction) {
-            Button("Randomize Color", systemImage: "arrow.trianglehead.2.clockwise") {
-                tint = SwipeActionsDemo.getRandomColor()
+            Button("Randomize Tint", systemImage: "arrow.trianglehead.2.clockwise") {
+                tint = .demoRandom
             }
         }
         ToolbarItem(placement: .primaryAction) {
-            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $darkModeOn)
+            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $isDarkMode)
         }
     }
 }

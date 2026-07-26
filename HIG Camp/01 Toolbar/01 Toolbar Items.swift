@@ -1,6 +1,11 @@
+//
+//  01 Toolbar Items.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct ToolbarItemsDemoView: View {
+struct ToolbarItemsDemo: View {
     // MARK: - Variant
     enum Variant {
         case singleItemTopTrailing
@@ -14,7 +19,7 @@ struct ToolbarItemsDemoView: View {
         case customTop
         case mixed
     }
-    
+
     let variant: Variant
 
     // MARK: - Info Card
@@ -24,15 +29,17 @@ struct ToolbarItemsDemoView: View {
         systemImage: "wrench.and.screwdriver.fill"
     )
 
-    // MARK: - Properties & Methods
-    @State private var selected = 1
+    // MARK: - State
     @State private var isOn = false
+
+    private let tint: Color = .blue
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
             content
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
@@ -47,29 +54,30 @@ struct ToolbarItemsDemoView: View {
             }
     }
 
+    @ViewBuilder
     private var content: some View {
         switch variant {
-        case .singleItemTopTrailing: AnyView(base.toolbar { singleItemTopTrailing })
-        case .singleItemPrincipal: AnyView(base.toolbar { singleItemPrincipal })
-        case .principalTrailingItems: AnyView(base.toolbar { principalTrailingItems })
-        case .undoRedoPlusPrimary: AnyView(base.toolbar { DemoSimpleTopToolbar() })
-        case .dualClusters: AnyView(base.toolbar { dualClusters })
-        case .overflow: AnyView(base.toolbar { overflow })
-        case .singleItemBottom: AnyView(base.toolbar { singleItemBottom })
-        case .customBottom: AnyView(base.toolbar { customBottom })
-        case .customTop: AnyView(base.toolbar { customTop })
-        case .mixed: AnyView(base.toolbar { mixed })
+        case .singleItemTopTrailing: base.toolbar { singleItemTopTrailing }
+        case .singleItemPrincipal: base.toolbar { singleItemPrincipal }
+        case .principalTrailingItems: base.toolbar { principalTrailingItems }
+        case .undoRedoPlusPrimary: base.toolbar { DemoSimpleTopToolbar() }
+        case .dualClusters: base.toolbar { dualClusters }
+        case .overflow: base.toolbar { overflow }
+        case .singleItemBottom: base.toolbar { singleItemBottom }
+        case .customBottom: base.toolbar { customBottom }
+        case .customTop: base.toolbar { customTop }
+        case .mixed: base.toolbar { mixed }
         }
     }
-    
+
     private func profileImage(size: CGFloat = 32) -> some View {
-            Image("g")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: size, height: size)
-                .clipShape(.circle)
-        }
-    
+        Image("g")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: size, height: size)
+            .clipShape(.circle)
+    }
+
     private var profileLockup: some View {
         Button {
         } label: {
@@ -87,7 +95,23 @@ struct ToolbarItemsDemoView: View {
         }
         .buttonStyle(.plain)
     }
-    
+
+    /// The same lockup reads well in a bottom bar slot and in the principal slot.
+    private var locationLockup: some View {
+        VStack(alignment: .center) {
+            HStack {
+                Image(systemName: "location.fill")
+                    .font(.caption)
+                    .foregroundStyle(.blue)
+                Text("Surabaya, ID")
+            }
+            Text("GMT+7")
+                .foregroundStyle(.secondary)
+                .font(.caption)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
     @ToolbarContentBuilder
     private var singleItemTopTrailing: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
@@ -157,46 +181,24 @@ struct ToolbarItemsDemoView: View {
         }
         ToolbarSpacer(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
-            VStack(alignment: .center) {
-                HStack {
-                    Image(systemName: "location.fill")
-                        .font(.caption)
-                        .foregroundStyle(.blue)
-                    Text("Surabaya, ID")
-                }
-                Text("GMT+7")
-                    .foregroundStyle(.secondary)
-                    .font(.caption)
-            }
-            .frame(maxWidth: .infinity)
+            locationLockup
         }
         ToolbarSpacer(placement: .bottomBar)
         ToolbarItem(placement: .bottomBar) {
             Button(role: .confirm) { }
         }
     }
-    
+
     @ToolbarContentBuilder
     private var customTop: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             profileImage(size: 30)
         }
         ToolbarItem(placement: .principal) {
-            VStack(alignment: .center) {
-                HStack {
-                    Image(systemName: "location.fill")
-                        .font(.caption)
-                        .foregroundStyle(.blue)
-                    Text("Surabaya, ID")
-                }
-                Text("GMT+7")
-                    .foregroundStyle(.secondary)
-                    .font(.caption)
-            }
-            .frame(maxWidth: .infinity)
+            locationLockup
         }
         ToolbarItem(placement: .topBarTrailing) {
-            Button("Bookmark", systemImage:  "bookmark") { }
+            Button("Bookmark", systemImage: "bookmark") { }
         }
         ToolbarItem(placement: .topBarTrailing) {
             Button(role: .confirm) { }
@@ -224,51 +226,41 @@ struct ToolbarItemsDemoView: View {
 }
 
 #Preview("Single Item Top Trailing") {
-    ToolbarItemsDemoView(variant: .singleItemTopTrailing)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .singleItemTopTrailing)
 }
 
 #Preview("Single Item Principal") {
-    ToolbarItemsDemoView(variant: .singleItemPrincipal)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .singleItemPrincipal)
 }
 
 #Preview("Undo/Redo + Primary") {
-    ToolbarItemsDemoView(variant: .undoRedoPlusPrimary)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .undoRedoPlusPrimary)
 }
 
 #Preview("Dual Clusters") {
-    ToolbarItemsDemoView(variant: .dualClusters)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .dualClusters)
 }
 
 #Preview("Overflow") {
-    ToolbarItemsDemoView(variant: .overflow)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .overflow)
 }
 
 #Preview("Single Item Bottom") {
-    ToolbarItemsDemoView(variant: .singleItemBottom)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .singleItemBottom)
 }
 
 #Preview("Custom View Bottom") {
-    ToolbarItemsDemoView(variant: .customBottom)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .customBottom)
 }
 
 #Preview("Custom View Top") {
-    ToolbarItemsDemoView(variant: .customTop)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .customTop)
 }
 
 #Preview("Mixed") {
-    ToolbarItemsDemoView(variant: .mixed)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .mixed)
 }
 
 #Preview("Principal w/ Trailing Items") {
-    ToolbarItemsDemoView(variant: .principalTrailingItems)
-        .tint(.blue)
+    ToolbarItemsDemo(variant: .principalTrailingItems)
 }

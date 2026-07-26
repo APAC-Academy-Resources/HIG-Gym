@@ -1,6 +1,11 @@
+//
+//  01 Tab Items.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TabItemsDemoView: View {
+struct TabItemsDemo: View {
     // MARK: - Variant
     enum Variant {
         case textAndIcon
@@ -17,6 +22,9 @@ struct TabItemsDemoView: View {
         description: "Tab bar acts as top level navigation",
         systemImage: "sparkles"
     )
+
+    // MARK: - State
+    private let tint: Color = .brown
 
     // MARK: - Body
     var body: some View {
@@ -52,10 +60,11 @@ struct TabItemsDemoView: View {
                 Tab { navStack(navigationTitle: "Settings") } label: { Image(systemName: "gearshape") }
             }
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
-    func navStack(navigationTitle: String) -> some View {
+    private func navStack(navigationTitle: String) -> some View {
         NavigationStack {
             DemoScrollView(count: 20)
                 .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
@@ -69,21 +78,17 @@ struct TabItemsDemoView: View {
 }
 
 #Preview("Text & Icon") {
-    TabItemsDemoView(variant: .textAndIcon)
-        .tint(.brown)
+    TabItemsDemo(variant: .textAndIcon)
 }
 
 #Preview("Badge Count") {
-    TabItemsDemoView(variant: .badgeCount)
-        .tint(.brown)
+    TabItemsDemo(variant: .badgeCount)
 }
 
 #Preview("Badge Text") {
-    TabItemsDemoView(variant: .badgeText)
-        .tint(.brown)
+    TabItemsDemo(variant: .badgeText)
 }
 
 #Preview("Icon Only") {
-    TabItemsDemoView(variant: .iconOnly)
-        .tint(.brown)
+    TabItemsDemo(variant: .iconOnly)
 }

@@ -1,3 +1,8 @@
+//
+//  01 SafeAreaBarVerticalDemoView.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
 /// Demonstrates `safeAreaBar(edge:)` on the **vertical** edges (`.top` / `.bottom`).
@@ -7,13 +12,15 @@ import SwiftUI
 /// scroll edge effect (Liquid Glass) behind it. Pass `showMaterial` to back the strip
 /// with `.ultraThinMaterial`; pass `toolbar` to add a real navigation/bottom `toolbar`
 /// alongside the bar, showing how the two layout systems stack and coexist.
-struct VerticalSafeAreaBarDemoView: View {
+struct SafeAreaBarVerticalDemo: View {
     // MARK: - Variant
-    enum VerticalSafeAreaBarEdge {
+    enum Variant {
         case top
         case bottom
         case both
     }
+
+    let variant: Variant
 
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
@@ -22,37 +29,37 @@ struct VerticalSafeAreaBarDemoView: View {
         systemImage: "sparkles"
     )
 
-    // MARK: - Properties & Methods
-    let edge: VerticalSafeAreaBarEdge
+    // MARK: - State
     var showMaterial = false
     var toolbar = false
     var title = true
 
     @State private var topSelection = 0
-    @State private var bottomSelection = 0
     @State private var isOn = false
+
+    private let tint: Color = .indigo
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
             Group {
-                switch edge {
+                switch variant {
                 case .top:
                     demoList
                         .safeAreaBar(edge: .top) { topBar($topSelection) }
-                    
+
                 case .bottom:
                     demoList
-                        .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection)
-                        }
-                    
+                        .safeAreaBar(edge: .bottom) { bottomBar }
+
                 case .both:
                     demoList
                         .safeAreaBar(edge: .top) { topBar($topSelection) }
-                        .safeAreaBar(edge: .bottom) { bottomBar($bottomSelection) }
+                        .safeAreaBar(edge: .bottom) { bottomBar }
                 }
             }
         }
+        .tint(tint)
     }
 
     // MARK: - View Components
@@ -72,8 +79,8 @@ struct VerticalSafeAreaBarDemoView: View {
             .padding(.horizontal)
             .padding(.vertical, 8)
     }
-    
-    private func bottomBar(_ selection: Binding<Int>) -> some View {
+
+    private var bottomBar: some View {
         HStack {
             Text("SFO")
                 .bold()
@@ -108,36 +115,29 @@ struct VerticalSafeAreaBarDemoView: View {
 }
 
 #Preview("Top no title") {
-    VerticalSafeAreaBarDemoView(edge: .top, title: false)
-        .tint(.orange)
+    SafeAreaBarVerticalDemo(variant: .top, title: false)
 }
 
 #Preview("Top") {
-    VerticalSafeAreaBarDemoView(edge: .top)
-        .tint(.orange)
+    SafeAreaBarVerticalDemo(variant: .top)
 }
 
 #Preview("Top + Background") {
-    VerticalSafeAreaBarDemoView(edge: .top, showMaterial: true)
-        .tint(.indigo)
+    SafeAreaBarVerticalDemo(variant: .top, showMaterial: true)
 }
 
 #Preview("Bottom") {
-    VerticalSafeAreaBarDemoView(edge: .bottom)
-        .tint(.blue)
+    SafeAreaBarVerticalDemo(variant: .bottom)
 }
 
 #Preview("Bottom + Background + Toolbar") {
-    VerticalSafeAreaBarDemoView(edge: .bottom, showMaterial: true, toolbar: true)
-        .tint(.brown)
+    SafeAreaBarVerticalDemo(variant: .bottom, showMaterial: true, toolbar: true)
 }
 
 #Preview("Both") {
-    VerticalSafeAreaBarDemoView(edge: .both)
-        .tint(.purple)
+    SafeAreaBarVerticalDemo(variant: .both)
 }
 
 #Preview("Both + Toolbar") {
-    VerticalSafeAreaBarDemoView(edge: .both, toolbar: true)
-        .tint(.pink)
+    SafeAreaBarVerticalDemo(variant: .both, toolbar: true)
 }

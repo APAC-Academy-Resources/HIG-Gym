@@ -1,10 +1,11 @@
+//
+//  01 Sheet Configurations.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct PresentationDetentsDemoView: View {
-    var detents: Set<PresentationDetent> = [.large]
-    var interactable: Bool = false
-    var useMiniToolbar: Bool = false
-
+struct SheetConfigurationsDemo: View {
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Presentation Detents",
@@ -12,9 +13,17 @@ struct PresentationDetentsDemoView: View {
         systemImage: "rectangle.portrait.bottomhalf.filled"
     )
 
-    // MARK: - Properties & Methods
+    // MARK: - State
+    /// Orthogonal switches rather than one `Variant` enum — a preview mixes and
+    /// matches them freely (custom height *and* nonmodal, for instance).
+    var detents: Set<PresentationDetent> = [.large]
+    var interactable: Bool = false
+    var useMiniToolbar: Bool = false
+
     @State private var isOpen = false
     @State private var selectedDetent: PresentationDetent = .large
+
+    private let tint: Color = .purple
 
     // MARK: - Body
     var body: some View {
@@ -42,34 +51,30 @@ struct PresentationDetentsDemoView: View {
                         .padding(.horizontal)
                 }
         }
+        .tint(tint)
     }
 }
 
 #Preview("Large") {
-    PresentationDetentsDemoView(detents: [.large])
-        .tint(.purple)
+    SheetConfigurationsDemo(detents: [.large])
 }
 
 #Preview("Medium") {
-    PresentationDetentsDemoView(detents: [.medium])
-        .tint(.indigo)
+    SheetConfigurationsDemo(detents: [.medium])
 }
 
 #Preview("Medium with 34pt close") {
-    PresentationDetentsDemoView(detents: [.medium], useMiniToolbar: true)
+    SheetConfigurationsDemo(detents: [.medium], useMiniToolbar: true)
 }
 
 #Preview("Custom Short") {
-    PresentationDetentsDemoView(detents: [.height(200)])
-        .tint(.blue)
+    SheetConfigurationsDemo(detents: [.height(200)])
 }
 
 #Preview("Combo") {
-    PresentationDetentsDemoView(detents: [.large, .medium, .height(200)])
-        .tint(.cyan)
+    SheetConfigurationsDemo(detents: [.large, .medium, .height(200)])
 }
 
 #Preview("Nonmodal Sheet") {
-    PresentationDetentsDemoView(detents: [.height(200)], interactable: true)
-        .tint(.cyan)
+    SheetConfigurationsDemo(detents: [.height(200)], interactable: true)
 }

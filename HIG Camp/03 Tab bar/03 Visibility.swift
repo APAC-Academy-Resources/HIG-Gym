@@ -1,6 +1,11 @@
+//
+//  03 Visibility.swift
+//  HIG Camp
+//
+
 import SwiftUI
 
-struct TabVisibilityDemoView: View {
+struct TabVisibilityDemo: View {
     // MARK: - Variant
     enum Variant {
         case alwaysVisible
@@ -17,52 +22,58 @@ struct TabVisibilityDemoView: View {
     )
 
     // MARK: - Body
+    //
+    // No tint on the type: visibility is the subject, and the system accent keeps
+    // the eye on where the bar is rather than what colour it is.
     var body: some View {
         TabView {
             Tab("Browse", systemImage: "list.bullet") {
-                NavigationStack {
-                    DemoScrollView(count: 20)
-                        .navigationTitle("Browse")
-                        .navigationDestination(for: String.self) {
-                            DemoDetailView(item: $0, tabBarHiddenOnDetail: variant == .hiddenOnDetail)
-                        }
-                        .toolbar {
-                            ToolbarItem(placement: .topBarTrailing) {
-                                Button("Star", systemImage: "star") { }
-                            }
-                        }
-                        .safeAreaBar(edge: .bottom) {
-                            infoCard
-                                .padding()
-                        }
-                }
+                tabContent(title: "Browse", count: 20, isPrimaryTab: true)
             }
             Tab("Favorites", systemImage: "star") {
-                NavigationStack {
-                    DemoScrollView(count: 12)
-                        .navigationTitle("Favorites")
-                        .navigationDestination(for: String.self) {
-                            DemoDetailView(item: $0, tabBarHiddenOnDetail: variant == .hiddenOnDetail)
-                        }
-                }
+                tabContent(title: "Favorites", count: 12)
             }
             Tab("Settings", systemImage: "gearshape") {
-                NavigationStack {
-                    DemoScrollView(count: 8)
-                        .navigationTitle("Settings")
-                        .navigationDestination(for: String.self) {
-                            DemoDetailView(item: $0, tabBarHiddenOnDetail: variant == .hiddenOnDetail)
-                        }
-                }
+                tabContent(title: "Settings", count: 8)
             }
+        }
+    }
+
+    // MARK: - View Components
+    /// One tab's list. The `.navigationDestination` stays visible here because
+    /// `tabBarHiddenOnDetail:` is the API being taught — the pushed detail is
+    /// what decides whether the tab bar survives.
+    ///
+    /// - Parameter isPrimaryTab: The first tab also carries the info card and a
+    ///   sample toolbar item; the other two are plain.
+    private func tabContent(title: String, count: Int, isPrimaryTab: Bool = false) -> some View {
+        NavigationStack {
+            DemoScrollView(count: count)
+                .navigationTitle(title)
+                .navigationDestination(for: String.self) {
+                    DemoDetailView(item: $0, tabBarHiddenOnDetail: variant == .hiddenOnDetail)
+                }
+                .toolbar {
+                    if isPrimaryTab {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Star", systemImage: "star") { }
+                        }
+                    }
+                }
+                .safeAreaBar(edge: .bottom) {
+                    if isPrimaryTab {
+                        infoCard
+                            .padding()
+                    }
+                }
         }
     }
 }
 
 #Preview("Always Visible") {
-    TabVisibilityDemoView(variant: .alwaysVisible)
+    TabVisibilityDemo(variant: .alwaysVisible)
 }
 
 #Preview("Hidden on Detail") {
-    TabVisibilityDemoView(variant: .hiddenOnDetail)
+    TabVisibilityDemo(variant: .hiddenOnDetail)
 }

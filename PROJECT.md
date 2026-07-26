@@ -8,8 +8,11 @@ A personal iOS 26 teaching/reference app for exploring Apple Human Interface Gui
 
 - Topics are grouped into numbered feature folders under `HIG Camp/` (`01 Toolbar`, `02 Safe Area bar`, …); shared building blocks live in `00 Shared`.
 - Files within a topic folder are numbered (`01 Toolbar Items.swift`, `02 TitleDisplayModes.swift`) and hold one component each.
+- **Every demo file follows one canonical shape** — header, `<Topic>Demo` type name, fixed MARK order, bare previews. See the **Demo File Structure** section of [CLAUDE.md](CLAUDE.md) for the full rule; do not invent a new layout.
+- **Chrome is shared, the subject is local.** `DemoPage` supplies the nav stack, tinted background, and Dark Mode / Randomize Tint toolbar; `DemoSection` supplies the card; `caption(_:)` supplies the on-screen explanation. The API a file teaches always stays literal and inline in that file.
+- **Two variant strategies, chosen by kind:** structural variation (the preview must rebuild — tab counts, sheet detents) uses a nested `enum Variant` + one named `#Preview` per case; tinkerable variation (a value to drag or flip live — font weight, list style) uses a top-level `enum <Thing>Option: String, CaseIterable, Identifiable` + `@State` + an in-app `Picker`.
 - Shared components are prefixed `Demo` (`DemoScrollView`, `DemoRowView`, …) and are parameterized so call sites stay terse.
-- Variants of a concept are modelled as an `UpperCamelCase` enum (`<Topic>Variant`) driving one parameterized view with multiple `#Preview` macros.
+- Demos whose *subject is the page chrome* (`01`–`04`, `05 System Materials`) and any `List`-based screen build their own stack instead of using `DemoPage`.
 - `ScrollView + ForEach` is preferred over `List` to allow background customization.
 - `navigationDestination(for:)` is registered at the call site (not inside shared views) so each screen owns its navigation.
 - No UITests, no central router, no shared coordinator.
@@ -17,7 +20,10 @@ A personal iOS 26 teaching/reference app for exploring Apple Human Interface Gui
 ## Current Topics
 
 ### 00 Shared — reusable building blocks
-`DemoScrollView` (tinted scrolling list, optional scroll-reset token), `DemoRowView`, `DemoDetailView`, `DemoSearchView`, `DemoPickerView`, `DemoMenuView`, `DemoModalView`.
+
+**Scaffold:** `DemoPage` (standard scrolling screen: nav stack, title, tinted background, Dark Mode + Randomize Tint toolbar; options for extra toolbar items, pinned info card, fixed tint), `DemoSection` + `caption(_:)` (titled card and its on-screen explanation), `Color.demoRandom`, `DemoMetrics` (card corner/padding, stack spacing, page margin).
+
+**Content:** `DemoScrollView` (tinted scrolling list, optional scroll-reset token), `DemoRowView`, `DemoDetailView`, `DemoSearchView`, `DemoPickerView`, `DemoMenuView`, `DemoModalView`, `DemoInfoCard`, `DemoSimpleTopToolbar`, `DemoMixedTopToolbar`.
 
 ### 01 Toolbar
 | File | What it demos |
@@ -92,6 +98,15 @@ A personal iOS 26 teaching/reference app for exploring Apple Human Interface Gui
 | `03 Fonts.swift` | Weights `.ultraLight`→`.black`, `fontDesign` `.serif`/`.monospaced`/`.rounded`, `fontWidth`, `.monospacedDigit()`, gradient `foregroundStyle`, `.tracking`, `.baselineOffset` |
 | `04 Dynamic Type.swift` | `@ScaledMetric`, live `dynamicTypeSize(_:)` `.xSmall`→`.accessibility5`, clamp range, reflow/truncation at large sizes |
 
+### 12 SF Symbols
+| File | What it demos |
+|---|---|
+| `01 Symbol Gallery.swift` | `Image(systemName:)` + `Label`; font weights `.ultraLight`→`.black`; `imageScale` `.small`/`.medium`/`.large`; variable value as a full-width `LazyVGrid` slider demo with `symbolVariableValueMode(.draw)` |
+| `02 Rendering Modes.swift` | `symbolRenderingMode` `.monochrome`/`.hierarchical`/`.palette`/`.multicolor`; monochrome shows flat vs `symbolColorRenderingMode(.gradient)`; randomizable palette `foregroundStyle`; Dark Mode toggle |
+| `03 Symbol Effects.swift` | discrete set (`.bounce`/`.pulse`/`.variableColor`/`.wiggle`/`.rotate`/`.breathe`) via shared trigger + "Play All"; indefinite set (`.pulse`/`.variableColor`/`.wiggle`/`.rotate`/`.breathe`/`.scale`) via `isActive:`; `VariableColorSymbolEffect` matrix (cumulative/iterative × reversing × dim/hide inactive); draw on/off (`.drawOn.wholeSymbol`/`.byLayer`/`.individually`); `contentTransition(.symbolEffect(.replace))` + `.replace.magic(fallback:)`; view `.transition` |
+
+Custom symbol: `cowboy` (person + upturned hat brim) authored as an SVG template and imported to `HIG Camp/Assets.xcassets/cowboy.symbolset/` — usable as `Image("cowboy")`, supports the same rendering modes and effects as system symbols.
+
 
 ## Roadmap — planned topics
 
@@ -104,7 +119,6 @@ Build in tier order; preview each tier before continuing. New files auto-include
 | Section | Files |
 |---|---|
 | `11 Color` | `01 Semantic Colors` (system palette, `.primary`/`.secondary`/`.fill`/`.background`) · `02 Tint & Adaptive` (`.tint()` reach, light/dark, `.mix(with:by:)`) |
-| `12 SF Symbols` | `01 Symbol Gallery` (categories, weights, scales) · `02 Rendering Modes` (monochrome/hierarchical/palette/multicolor) · `03 Symbol Effects` (`.symbolEffect`, variable value) |
 
 ### Tier 3 — Structure & polish
 

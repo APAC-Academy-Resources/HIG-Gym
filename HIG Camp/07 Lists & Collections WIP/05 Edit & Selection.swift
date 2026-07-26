@@ -2,22 +2,19 @@
 //  05 Edit & Selection.swift
 //  HIG Camp
 //
-//  Created by George Ananda on 22/06/26.
-//
 
 import SwiftUI
 
-struct EditAndSelection: View {
-    // MARK: - Variants
+struct EditAndSelectionDemo: View {
+    // MARK: - Variant
     enum Variant {
         case reordering
         case deleting
         case selecting
-        case all
     }
-    
+
     let variant: Variant
-    
+
     // MARK: - Info Card
     let infoCard = DemoInfoCard(
         title: "Edit & selection",
@@ -25,29 +22,17 @@ struct EditAndSelection: View {
         systemImage: "checklist"
     )
 
-    // MARK: - Properties & Methods
+    // MARK: - State
     @State private var items: [String] = (1...8).map { "Item \($0)" }
     @State private var selection = Set<String>()
-    @State private var tint: Color = EditAndSelection.getRandomColor()
-
-    static func getRandomColor() -> Color {
-        Color(
-            hue: .random(in: 0...1),
-            saturation: .random(in: 0.4...0.8),
-            brightness: .random(in: 0.6...0.8)
-        )
-    }
+    @State private var tint: Color = .demoRandom
+    @State private var isDarkMode = false
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            List {
-//                Section {
-//                    Text("\(selection.count) selected")
-//                        .foregroundStyle(.tint)
-//                }
-
-                Section("Items") {
+            List(selection: variant == .selecting ? $selection : nil) {
+                Section {
                     switch variant {
                     case .reordering:
                         ForEach(items, id: \.self) { item in
@@ -59,10 +44,21 @@ struct EditAndSelection: View {
                             Text(item)
                         }
                         .onDelete { items.remove(atOffsets: $0) }
-                    default:
+                    case .selecting:
                         ForEach(items, id: \.self) { item in
                             Text(item)
                         }
+                    }
+                } header: {
+                    Text("Items")
+                } footer: {
+                    switch variant {
+                    case .reordering:
+                        caption("`.onMove(perform:)` on a `ForEach` shows drag handles in edit mode.")
+                    case .deleting:
+                        caption("`.onDelete(perform:)` adds the red minus badge and the swipe-to-delete gesture.")
+                    case .selecting:
+                        caption("`List(selection:)` bound to a `Set` allows multi-select once `EditButton` turns edit mode on. \(selection.count) selected.")
                     }
                 }
             }
@@ -71,28 +67,41 @@ struct EditAndSelection: View {
             .toolbar {
                 toolbar
             }
-            .safeAreaBar(edge: .top, content: {
+            .safeAreaBar(edge: .top) {
                 infoCard
                     .padding()
-            })
+            }
             .animation(.easeInOut, value: tint)
         }
         .tint(tint)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 
     // MARK: - View Components
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             EditButton()
+        }
+        ToolbarItem(placement: .primaryAction) {
+            Button("Randomize Tint", systemImage: "arrow.trianglehead.2.clockwise") {
+                tint = .demoRandom
+            }
+        }
+        ToolbarItem(placement: .primaryAction) {
+            Toggle("Dark Mode", systemImage: "moon.fill", isOn: $isDarkMode)
         }
     }
 }
 
 #Preview("Reordering") {
-    EditAndSelection(variant: .reordering)
+    EditAndSelectionDemo(variant: .reordering)
 }
 
 #Preview("Deleting") {
-    EditAndSelection(variant: .deleting)
+    EditAndSelectionDemo(variant: .deleting)
+}
+
+#Preview("Selecting") {
+    EditAndSelectionDemo(variant: .selecting)
 }
