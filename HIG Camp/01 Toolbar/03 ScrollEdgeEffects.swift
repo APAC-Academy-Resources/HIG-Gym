@@ -34,13 +34,19 @@ struct ScrollEdgeEffectsDemo: View {
         default: .automatic
         }
     }
+    
+    private var customMaterialBackground: Bool {
+        variant == .hardWithMaterial
+    }
+    
+    @State private var sheetIsOpen = false
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            if variant == .hardWithMaterial {
+            if customMaterialBackground {
                 content
-                    .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+                    .toolbarBackground(.thickMaterial, for: .navigationBar)
                     .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             } else {
                 content
@@ -59,12 +65,43 @@ struct ScrollEdgeEffectsDemo: View {
             .toolbar {
                 DemoSimpleTopToolbar()
             }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Open Sheet") {
+                        sheetIsOpen.toggle()
+                    }
+                }
+            }
             .safeAreaBar(edge: .bottom) {
                 infoCard
                     .padding(.horizontal)
                     .padding(.top)
             }
             .navigationDestination(for: String.self) { DemoDetailView(item: $0) }
+            .sheet(isPresented: $sheetIsOpen) {
+                NavigationStack {
+                    if customMaterialBackground {
+                        sheetContent
+                            .toolbarBackground(.thickMaterial, for: .navigationBar)
+                            .toolbarBackgroundVisibility( .visible, for: .navigationBar)
+                    } else {
+                        sheetContent
+                    }
+                }
+                .presentationDetents([.medium])
+            }
+    }
+    
+    private var sheetContent: some View {
+        DemoScrollView(count: 40)
+            .scrollEdgeEffectStyle(style, for: .top)
+            .scrollEdgeEffectHidden(variant == .hidden)
+            .navigationTitle("Edge Effect on Sheet")
+            .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                DemoMixedTopToolbar()
+            }
+            .presentationDragIndicator(.visible)
     }
 }
 
